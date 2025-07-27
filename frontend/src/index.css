@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --font-inter: "Inter", sans-serif;
+    --color-background: #0D1B2A;
+    --color-primary-accent: #FF4C98;
+    --color-secondary-accent: #00CFFF;
+    --color-main: #F1F1F1;
+    --color-card: 	#1B263B;
+}
+
+body {
+    font-family: var(--font-inter);
+    background-color: var(--color-background);
+    color: var(--color-main);
+}
+
+@utility container {
+    @apply max-w-[1770px] mx-auto px-5 min-[1810px]:px-0;
+}
+
+@utility scroll-hide {
+    scrollbar-width: none;
+    overflow-style: none;
+}
+
+.hide-sidebar-scroll {
+    overflow-y: hidden;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary-accent);
+}
+/* custom scroll bar */
+
+@utility blurred-edge {
+    box-shadow: 25px 25px 50px 0 var(--color-background) inset, -25px -25px 50px 0 var(--color-background) inset; 
+}
+
+@utility sub-header {
+    @apply font-semibold text-primary-accent text-2xl mb-4;
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none;              /* Chrome/Safari */
+}
+
+.custom-pagination .MuiPaginationItem-root {
+    @apply text-main;
+}
+
+.custom-pagination .MuiPagination-ul {
+    @apply w-fit mx-auto;
+}
+
+.custom-pagination .Mui-selected {
+    background-color: var(--color-primary-accent) !important;
+    color: white !important;
+    border-radius: 8px;
+}
