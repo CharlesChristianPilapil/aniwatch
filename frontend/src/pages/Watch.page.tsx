@@ -144,13 +144,14 @@ const WatchPage = () => {
                         <div className="aspect-video w-full rounded-md overflow-hidden">
                             <iframe
                                 src={`https://megaplay.buzz/stream/s-2/${episodeNumber}/${language}`}
-                                className="w-auto h-[150px] sm:w-full sm:h-full"
+                                width="100%"
+                                height="100%"
                                 allow="fullscreen"
                                 allowFullScreen
                                 sandbox="allow-same-origin allow-scripts"
+                                className="w-full h-full"
                                 title={`Episode ${episodeNumber}`}
-                                />
-                            </div>
+                            />
                         </div>
                         <div className="">
                             <FormControl className="text-main mb-4 flex sm:flex-row sm:items-center gap-4">
