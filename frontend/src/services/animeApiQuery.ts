@@ -1,10 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { AnimeEpisodeType, AnimeInfoType, AnimeListResponseType, GenreListType } from "../utils/types/anime.type";
 
+const baseUrl =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_DEPLOYMENT_API
+    : import.meta.env.VITE_LOCAL_API;
+
 export const animeApiQuery = createApi({
     reducerPath: "anime-api",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:8000/api/anime",
+        baseUrl: `${baseUrl}/api/anime`,
     }),
     endpoints: (builder) => ({
         getTopAiring: builder.query<AnimeListResponseType, { page: number }>({

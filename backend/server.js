@@ -22,6 +22,10 @@ app.use("/api/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/api/anime", animeRoutes);
 
+app.get("/", (req, res) => {
+    res.send("Welcome to AniWatch API.");
+});
+
 app.use(errorHandler);
 app.use(notFound);
 
