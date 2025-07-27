@@ -141,11 +141,10 @@ const WatchPage = () => {
                                 to open it directly in the provider's site.
                             </p>
                         )}
-                        <div className="w-full overflow-hidden sm:aspect-video">
-                            <div className="scale-[0.85] origin-top-left sm:scale-100 sm:origin-center">
-                                <iframe
+                        <div className="aspect-video w-full rounded-md overflow-hidden">
+                            <iframe
                                 src={`https://megaplay.buzz/stream/s-2/${episodeNumber}/${language}`}
-                                className="w-[640px] h-[360px] sm:w-full sm:h-full"
+                                className="w-auto h-[150px] sm:w-full sm:h-full"
                                 allow="fullscreen"
                                 allowFullScreen
                                 sandbox="allow-same-origin allow-scripts"
