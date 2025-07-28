@@ -17,7 +17,7 @@ const RelatedAnimeCard = ({ list, isLoading = false }: Props) => {
         <div className="w-full">
             <h2 className="sub-header"> Related Anime </h2>
             <div className="bg-main/10 pb-4 rounded-sm">
-                <ul className={`max-h-[624px] ${list.length < 5 || isLoading ? 'overflow-y-hidden' : 'overflow-y-scroll'} pt-2 px-2`}>
+                <ul className={`max-h-[624px] ${list.length < 6 || isLoading ? 'overflow-y-hidden' : 'overflow-y-scroll'} pt-2 px-2`}>
                     {isLoading ? (
                         Array.from({ length: 5 }).map((_, index) => (
                             <li key={index}>

@@ -103,9 +103,9 @@ const WatchPage = () => {
                                 })}
                             </Select>
                         </FormControl>
-                        <ul className="grid gap-1 text-sm max-h-[428px] overflow-y-scroll scroll-hide">
+                        <ul className="grid gap-1 text-sm max-h-[480px] overflow-y-scroll scroll-hide">
                             {(isAnimeInfoLoading || isAnimeInfoFetching) ? (
-                                Array.from({ length: 9 }).map((_, index) => (
+                                Array.from({ length: 10 }).map((_, index) => (
                                     <li key={index}> 
                                         <Skeleton height={44} sx={{ transform: "unset" }} className="bg-main/25" />
                                     </li>
