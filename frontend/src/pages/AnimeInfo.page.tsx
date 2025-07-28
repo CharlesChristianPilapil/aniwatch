@@ -78,7 +78,7 @@ const AnimeInfoPage = () => {
                                         <p className="opacity-50"> {data?.title || 'N/A'} </p>
                                     </div>
                                     <h2 className="text-center md:text-start font-semibold text-lg md:text-2xl lg:text-4xl"> {data?.title || 'N/A'} </h2>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 text-sm">
                                         <Link 
                                             to={`/watch/${data?.episodes[0]?.id}`} 
                                             className="h-full bg-secondary-accent text-background hover:bg-secondary-accent/90 px-4 py-2 rounded-full flex gap-1 items-center"
@@ -91,7 +91,7 @@ const AnimeInfoPage = () => {
                                             Add to List 
                                         </button>
                                     </div>
-                                    <p className="max-w-[764px] hidden md:block"> {data?.description} </p>
+                                    <p className="max-w-[764px] lg:min-h-[240px] hidden md:block"> {data?.description} </p>
                                 </>
                             )}
                         </div>

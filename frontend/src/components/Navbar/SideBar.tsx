@@ -59,7 +59,7 @@ const SideBar = ({
         <aside onClick={() => onToggle(false)} className="fixed top-0 left-0 w-full h-full bg-background/25 backdrop-blur-xs z-10">
             <div 
                 onClick={(e) => e.stopPropagation()} 
-                className="max-w-[250px] h-full bg-background/25 py-5 overflow-y-scroll scroll-hide drop-shadow-sm"
+                className="max-w-[250px] h-full bg-background/50 py-5 overflow-y-scroll scroll-hide drop-shadow-sm"
             >
                 <button 
                     onClick={() => onToggle(false)}

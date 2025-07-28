@@ -79,10 +79,10 @@ const Navbar = () => {
                     <div className="sm:hidden">
                         <button 
                             aria-label="toggle search bar for small screens"
-                            className={`bg-primary-accent rounded-sm p-[2px] relative z-6`}
+                            className={`${showSearchBar ? 'bg-primary-accent' : ''} rounded-sm p-[2px] relative z-6`}
                             onClick={() => setShowSearchBar(prevVal => !prevVal)}
                         > 
-                            <SearchIcon className="text-background" />
+                            <SearchIcon className={`${showSearchBar ? 'text-background' : 'text-main'}`} />
                         </button>
                         {showSearchBar && (
                             <div 
