@@ -11,7 +11,7 @@ import errorHandler from "./middleware/error.js";
 import "./cron/cleanMFA.js";
 import "./cron/cleanLoginAttempts.js";
 const PORT = process.env.PORT || 5000;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const app = express();
 
@@ -20,7 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
     cors({
-        origin: CORS_ORIGIN,
+        origin: IS_PRODUCTION
+            ? "https://cc-aniwatch.vercel.app"
+            : "http://localhost:5173",
         credentials: true,
     })
 );

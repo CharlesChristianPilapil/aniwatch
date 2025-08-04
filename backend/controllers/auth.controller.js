@@ -7,6 +7,7 @@ import parseAsUTC from "../utils/helpers/parseAsUtc.js";
 import generateOtp from "../utils/helpers/generateOtp.js";
 
 const LOCK_DURATION = (1 * 60 + 30) * 1000;
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 export const login = async (req, res, next) => {
     const { identifier, password } = req.body;
@@ -191,6 +192,9 @@ export const verify = async (req, res, next) => {
         return res
             .cookie("accessToken", token, {
                 httpOnly: true,
+                secure: IS_PRODUCTION,
+                sameSite: IS_PRODUCTION ? "None" : "Lax",
+                maxAge: 24 * 60 * 60 * 1000,
             })
             .status(200)
             .json({
