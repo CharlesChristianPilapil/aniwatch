@@ -1,17 +1,17 @@
 export type AnimeCardType = {
     id: string;
     title: string;
-    url: string;
     image: string;
     duration: string;
-    watchList: string;
-    japaneseTitle: string;
     type: string;
     nsfw: boolean;
-    sub: number;
-    dub: number;
-    episodes: number;
-}
+    url?: string;
+    watchList?: string;
+    japaneseTitle?: string;
+    sub?: number;
+    dub?: number;
+    episodes?: number;
+};
 
 export type AnimeListResponseType = {
     success: boolean;
@@ -19,7 +19,7 @@ export type AnimeListResponseType = {
     hasNextPage: boolean;
     totalPages: number;
     results: AnimeCardType[];
-}
+};
 
 export type AnimeInfoType = {
     success: boolean;
@@ -41,7 +41,7 @@ export type AnimeInfoType = {
         type: string;
         sub: number;
         dub: number;
-        episodes: number
+        episodes: number;
     }[];
     subOrDub: string;
     hasSub: boolean;
@@ -59,34 +59,45 @@ export type AnimeInfoType = {
         isDubbed: boolean;
         url: string;
     }[];
-}
+};
 
 export type GenreListType = {
     success: boolean;
-    genres: string[]
-}
+    genres: string[];
+};
 
 export type AnimeEpisodeType = {
     headers: {
-        Referer: string
-    },
-    subtitles: [],
+        Referer: string;
+    };
+    subtitles: [];
     intro: {
-        start: number,
-        end: number
-    },
+        start: number;
+        end: number;
+    };
     outro: {
-        start: number,
-        end: number
-    },
-    sources: []
-}
+        start: number;
+        end: number;
+    };
+    sources: [];
+};
 
 export type AnimeItemType = {
     id: string;
     title: string;
-    image: string;
+    image?: string;
     sub: number;
     dub: number;
     type: string;
-}
+};
+
+export type BookmarkedItem = {
+    id: number;
+    user_id: number;
+    anime_id: string;
+    title: string;
+    image: string;
+    type: string;
+    bookmark_status: string;
+    anime_status: string;
+};

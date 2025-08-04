@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import SideBar from "./SideBar";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import useGetScreenSize from "../../hooks/useGetScreenSize";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useDispatch } from "react-redux";
+import { logout } from "../../slices/authSlice";
+import { useLogoutMutation } from "../../services/authService";
 
 const Navbar = () => {
-
     const navigate = useNavigate();
 
     const { width } = useGetScreenSize();
@@ -14,15 +16,18 @@ const Navbar = () => {
     const [toggle, setToggle] = useState<boolean>(false);
     const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
+    const dispatch = useDispatch();
+    const [logoutMutation] = useLogoutMutation();
+
     useEffect(() => {
         if (toggle || showSearchBar) {
-            document.body.classList.add('hide-sidebar-scroll');
+            document.body.classList.add("hide-sidebar-scroll");
         } else {
-            document.body.classList.remove('hide-sidebar-scroll');
+            document.body.classList.remove("hide-sidebar-scroll");
         }
 
         return () => {
-            document.body.classList.remove('hide-sidebar-scroll');
+            document.body.classList.remove("hide-sidebar-scroll");
         };
     }, [toggle, showSearchBar]);
 
@@ -41,13 +46,13 @@ const Navbar = () => {
             e.currentTarget.reset();
             (document.activeElement as HTMLElement)?.blur();
         }
-    }
+    };
 
     useEffect(() => {
         if (width >= 640 && showSearchBar) {
             setShowSearchBar(false);
         }
-    }, [width, showSearchBar])
+    }, [width, showSearchBar]);
 
     return (
         <nav>
@@ -64,50 +69,92 @@ const Navbar = () => {
                             <div className="h-[2px] w-1/4 bg-main group-hover:w-3/4 group-hover:bg-primary-accent absolute bottom-0 transition-all duration-200" />
                         </button>
                         <Link to={"/"}>
-                            <h1 className="font-bold text-xl lg:text-2xl hover:text-secondary-accent"> AniWatch </h1>
+                            <h1 className="font-bold text-xl lg:text-2xl hover:text-secondary-accent">
+                                {" "}
+                                AniWatch{" "}
+                            </h1>
                         </Link>
                     </div>
-                    <form 
-                        onSubmit={handleQuery} 
+                    <form
+                        onSubmit={handleQuery}
                         className="bg-main text-background rounded-full hidden sm:flex items-center overflow-hidden"
                     >
-                        <input name="search" type="text" placeholder="search" className="rounded outline-none px-4 py-2 flex-1 w-full"/>
-                        <button type="submit" className="h-10 w-10 bg-secondary-accent cursor-pointer"> <SearchIcon /> </button>
+                        <input
+                            name="search"
+                            type="text"
+                            placeholder="search"
+                            className="rounded outline-none px-4 py-2 flex-1 w-full"
+                        />
+                        <button
+                            type="submit"
+                            className="h-10 w-10 bg-secondary-accent cursor-pointer"
+                        >
+                            {" "}
+                            <SearchIcon />{" "}
+                        </button>
                     </form>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="sm:hidden">
-                        <button 
+                        <button
                             aria-label="toggle search bar for small screens"
-                            className={`${showSearchBar ? 'bg-primary-accent' : ''} rounded-sm p-[2px] relative z-6`}
-                            onClick={() => setShowSearchBar(prevVal => !prevVal)}
-                        > 
-                            <SearchIcon className={`${showSearchBar ? 'text-background' : 'text-main'}`} />
+                            className={`${
+                                showSearchBar ? "bg-primary-accent" : ""
+                            } rounded-sm p-[2px] relative z-6`}
+                            onClick={() =>
+                                setShowSearchBar((prevVal) => !prevVal)
+                            }
+                        >
+                            <SearchIcon
+                                className={`${
+                                    showSearchBar
+                                        ? "text-background"
+                                        : "text-main"
+                                }`}
+                            />
                         </button>
                         {showSearchBar && (
-                            <div 
-                                onClick={() => setShowSearchBar(false)} 
+                            <div
+                                onClick={() => setShowSearchBar(false)}
                                 className="absolute top-0 left-0 w-full h-full z-5 bg-background/10 backdrop-blur-xs flex justify-end px-4"
                             >
                                 <form
-                                    onClick={(e) => e.stopPropagation()} 
-                                    onSubmit={handleQuery} 
+                                    onClick={(e) => e.stopPropagation()}
+                                    onSubmit={handleQuery}
                                     className="mt-[54px] max-w-[200px] h-fit bg-main text-background flex rounded-sm items-center overflow-hidden z-10"
                                 >
-                                    <input name="search" type="text" placeholder="search" className="rounded outline-none px-4 py-2 flex-1 w-full"/>
-                                    <button type="submit" className="h-10 w-10 bg-secondary-accent cursor-pointer"> <SearchIcon /> </button>
+                                    <input
+                                        name="search"
+                                        type="text"
+                                        placeholder="search"
+                                        className="rounded outline-none px-4 py-2 flex-1 w-full"
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="h-10 w-10 bg-secondary-accent cursor-pointer"
+                                    >
+                                        {" "}
+                                        <SearchIcon />{" "}
+                                    </button>
                                 </form>
                             </div>
                         )}
                     </div>
-                    <div>
+                    <div
+                        onClick={() => {
+                            dispatch(logout());
+                            logoutMutation({}).unwrap();
+                            alert("Logged out");
+                        }}
+                    >
                         <div className="flex items-center gap-2">
-                            <h2> Guest </h2> <AccountCircleIcon className="text-main h-8 w-8" />
+                            <h2> Guest </h2>{" "}
+                            <AccountCircleIcon className="text-main h-8 w-8" />
                         </div>
                     </div>
                 </div>
             </div>
-            <SideBar 
+            <SideBar
                 isToggled={toggle}
                 onToggle={(e: boolean) => setToggle(e)}
             />

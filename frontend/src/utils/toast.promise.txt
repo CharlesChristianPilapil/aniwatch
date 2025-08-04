@@ -1,0 +1,24 @@
+// toast.promise(
+//     addBookmark(bookmarkPayload)
+//         .unwrap()
+//         .then(() => {
+//             setOpen(false);
+//         })
+//         .catch((error: unknown) => {
+//             const err = error as FetchBaseQueryError;
+//             if (err.status === 401) {
+//                 console.error("Not authenticated.");
+//                 setIsModalOpen(true);
+//             }
+//             // Re-throw to show toast error
+//             throw error;
+//         }),
+//     {
+//         loading: "Adding to bookmark...",
+//         success: "Title added to bookmarks.",
+//         error: (err) =>
+//             err.status === 401
+//                 ? "Login to add bookmark."
+//                 : "Failed to add bookmark.",
+//     }
+// );

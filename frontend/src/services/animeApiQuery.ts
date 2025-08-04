@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { AnimeEpisodeType, AnimeInfoType, AnimeListResponseType, GenreListType } from "../utils/types/anime.type";
-
-const baseUrl =
-  import.meta.env.MODE === 'production'
-    ? import.meta.env.VITE_DEPLOYMENT_API
-    : import.meta.env.VITE_LOCAL_API;
+import type {
+    AnimeEpisodeType,
+    AnimeInfoType,
+    AnimeListResponseType,
+    GenreListType,
+} from "../utils/types/anime.type";
+import baseUrl from "../utils/constants/baseApiUrl";
 
 export const animeApiQuery = createApi({
     reducerPath: "anime-api",
@@ -15,10 +16,16 @@ export const animeApiQuery = createApi({
         getTopAiring: builder.query<AnimeListResponseType, { page: number }>({
             query: ({ page = 1 }) => `/top-airing?page=${page}`,
         }),
-        getRecentlyAdded: builder.query<AnimeListResponseType, { page: number }>({
+        getRecentlyAdded: builder.query<
+            AnimeListResponseType,
+            { page: number }
+        >({
             query: ({ page = 1 }) => `/recently-added?page=${page}`,
         }),
-        getRecentEpisodes: builder.query<AnimeListResponseType, { page: number }>({
+        getRecentEpisodes: builder.query<
+            AnimeListResponseType,
+            { page: number }
+        >({
             query: ({ page = 1 }) => `/recent-episodes?page=${page}`,
         }),
         getMostPopular: builder.query<AnimeListResponseType, { page: number }>({
@@ -48,16 +55,22 @@ export const animeApiQuery = createApi({
         getGenreList: builder.query<GenreListType, void>({
             query: () => `/genre/list`,
         }),
-        getListByGenre: builder.query<AnimeListResponseType, { genre: string, page: number }>({
+        getListByGenre: builder.query<
+            AnimeListResponseType,
+            { genre: string; page: number }
+        >({
             query: ({ genre, page }) => `/genre/${genre}?page=${page}`,
         }),
-        getListByQuery: builder.query<AnimeListResponseType, { query: string, page: number }>({
+        getListByQuery: builder.query<
+            AnimeListResponseType,
+            { query: string; page: number }
+        >({
             query: ({ query, page }) => `/${query}?page=${page}`,
         }),
     }),
-})
+});
 
-export const { 
+export const {
     useGetTopAiringQuery,
     useGetRecentlyAddedQuery,
     useGetRecentEpisodesQuery,

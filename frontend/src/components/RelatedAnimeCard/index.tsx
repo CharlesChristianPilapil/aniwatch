@@ -17,7 +17,7 @@ const RelatedAnimeCard = ({ list, isLoading = false }: Props) => {
         <div className="w-full">
             <h2 className="sub-header"> Related Anime </h2>
             <div className="bg-main/10 pb-4 rounded-sm">
-                <ul className={`max-h-[624px] ${list.length < 6 || isLoading ? 'overflow-y-hidden' : 'overflow-y-scroll'} pt-2 px-2`}>
+                <ul className={`max-h-[624px] ${list.length < 6 || isLoading ? 'overflow-y-hidden' : 'overflow-y-scroll'} pt-2 px-2 transparent-track`}>
                     {isLoading ? (
                         Array.from({ length: 5 }).map((_, index) => (
                             <li key={index}>
@@ -44,7 +44,7 @@ const RelatedAnimeCard = ({ list, isLoading = false }: Props) => {
                     {isLoading ? (
                         <Skeleton variant="text" height={48} sx={{ transform: "unset" }} className="mt-2" />
                     ) : (
-                        list.length > 5 && (
+                        list.length > 6 && (
                             <button
                                 onClick={() => setToggle(prevVal => !prevVal)} 
                                 className="w-full bg-primary-accent rounded-sm py-3 mt-2 cursor-pointer hover:opacity-80"

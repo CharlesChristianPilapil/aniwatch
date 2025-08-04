@@ -15,6 +15,7 @@ import RecentEpisodesPage from "../pages/RecentEpisodes.page";
 import WatchPage from "../pages/Watch.page";
 import GenreListPage from "../pages/GenreList.page";
 import SearchAnimePage from "../pages/SearchAnime.page";
+import AuthTest from "../pages/AuthTest";
 
 
 export const router = createBrowserRouter([
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
             { path: '/watch/:episodeId', element: <WatchPage /> },
             { path: '/genre/:genre', element: <GenreListPage /> },
             { path: '/search/:query', element: <SearchAnimePage /> },
+            { path: '/auth', element: <AuthTest /> },
             { path: '*', element: <ErrorPage /> }
         ] 
     },

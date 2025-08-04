@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { 
-    useGetMostPopularQuery, 
-    useGetMoviesQuery, 
-    useGetRecentEpisodesQuery, 
-    useGetRecentlyAddedQuery, 
-    useGetSpecialsQuery, 
-    useGetTopAiringQuery, 
-    useGetTvQuery 
-} from "./services/animeApiQuery"
+import {
+    useGetMostPopularQuery,
+    useGetMoviesQuery,
+    useGetRecentEpisodesQuery,
+    useGetRecentlyAddedQuery,
+    useGetSpecialsQuery,
+    useGetTopAiringQuery,
+    useGetTvQuery,
+} from "./services/animeApiQuery";
 import type { AnimeCardType } from "./utils/types/anime.type";
 import AnimeCard from "./components/AnimeCard";
 import GenreCard from "./components/GenreCard";
@@ -32,28 +32,24 @@ const AnimeGallery = ({
             <div className="flex justify-between items-center gap-10">
                 <h2 className="sub-header"> {title} </h2>
                 {(!isLoading || !isError) && (
-                    <Link 
-                        to={navigationUrl} 
+                    <Link
+                        to={navigationUrl}
                         className="hover:text-secondary-accent hover:underline"
-                    > 
-                        View More 
+                    >
+                        View More
                     </Link>
                 )}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                {(isLoading || isError) ? (
-                    Array.from({ length: 12 }).map((_, index) => (
-                        <AnimeCardSkeleton key={index} />
-                    ))
-                ) : (
-                    list.map((item) => (
-                        <AnimeCard key={item.id} {...item}/>
-                    ))
-                )}
+                {isLoading || isError
+                    ? Array.from({ length: 12 }).map((_, index) => (
+                          <AnimeCardSkeleton key={index} />
+                      ))
+                    : list.map((item) => <AnimeCard key={item.id} {...item} />)}
             </div>
         </div>
-    )
-}
+    );
+};
 
 function App() {
     const page = 1;
@@ -77,21 +73,24 @@ function App() {
             title: "Most Popular",
             redirectUrlTo: "/most-popular",
             list: mostPopularQuery?.data?.results || [],
-            isLoading: mostPopularQuery?.isLoading || mostPopularQuery?.isFetching,
+            isLoading:
+                mostPopularQuery?.isLoading || mostPopularQuery?.isFetching,
             isError: mostPopularQuery?.isError,
         },
         {
             title: "Recently Added",
             redirectUrlTo: "/recently-added",
             list: recentlyAddedQuery?.data?.results || [],
-            isLoading: recentlyAddedQuery?.isLoading || recentlyAddedQuery?.isFetching,
+            isLoading:
+                recentlyAddedQuery?.isLoading || recentlyAddedQuery?.isFetching,
             isError: recentlyAddedQuery?.isError,
         },
         {
             title: "Recent Episodes",
             redirectUrlTo: "/recent-episodes",
             list: recentEpisodeQuery?.data?.results || [],
-            isLoading: recentEpisodeQuery?.isLoading || recentEpisodeQuery?.isFetching,
+            isLoading:
+                recentEpisodeQuery?.isLoading || recentEpisodeQuery?.isFetching,
             isError: recentEpisodeQuery?.isError,
         },
     ];
@@ -102,18 +101,38 @@ function App() {
                 <div className="absolute top-0 left-0 w-full h-full bg-black/50" />
                 <div className="container relative z-1">
                     <div className="max-w-[800px]">
-                        <h2 className="text-2xl sm:text-4xl md:text-6xl lg:text-8xl font-semibold"> Welcome to <span className="text-primary-accent"> AniWatch </span> </h2>
+                        <h2 className="text-2xl sm:text-4xl md:text-6xl lg:text-8xl font-semibold">
+                            {" "}
+                            Welcome to{" "}
+                            <span className="text-primary-accent">
+                                {" "}
+                                AniWatch{" "}
+                            </span>{" "}
+                        </h2>
                         <div className="space-y-4">
-                            <p> Stream your favorite anime for free. Built as a personal project for learning and exploration. </p>
                             <p>
-                                Built with modern web technologies, this platform is constantly evolving, integrating new features, and refining performance. Whether you're into classic titles or the latest seasonal releases, AniWatch is your go-to hub for all things anime.
+                                {" "}
+                                Stream your favorite anime for free. Built as a
+                                personal project for learning and exploration.{" "}
                             </p>
-                            <p> Explore, discover, and enjoy anime like never before. </p>
+                            <p>
+                                Built with modern web technologies, this
+                                platform is constantly evolving, integrating new
+                                features, and refining performance. Whether
+                                you're into classic titles or the latest
+                                seasonal releases, AniWatch is your go-to hub
+                                for all things anime.
+                            </p>
+                            <p>
+                                {" "}
+                                Explore, discover, and enjoy anime like never
+                                before.{" "}
+                            </p>
                         </div>
                     </div>
                 </div>
             </header>
-            <main className='container'>
+            <main className="container">
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10">
                     {animeSections.map((data) => (
                         <AnimeItemListCard key={data.title} {...data} />
@@ -121,36 +140,56 @@ function App() {
                 </div>
                 <div className="flex flex-col lg:flex-row gap-x-5 gap-y-10 mt-10">
                     <div className="flex-1 w-full space-y-10">
-                        <AnimeGallery 
+                        <AnimeGallery
                             title="Movies"
                             navigationUrl="/movies"
                             list={moviesQuery.data?.results.slice(0, 12) || []}
-                            isLoading={moviesQuery.isLoading || moviesQuery.isFetching}
-                            isError={!moviesQuery.data?.success || moviesQuery.isError}
+                            isLoading={
+                                moviesQuery.isLoading || moviesQuery.isFetching
+                            }
+                            isError={
+                                !moviesQuery.data?.success ||
+                                moviesQuery.isError
+                            }
                         />
-                        <AnimeGallery 
+                        <AnimeGallery
                             title="TV Series"
                             navigationUrl="/tv"
-                            list={tvSeriesQuery.data?.results.slice(0, 12) || []}
-                            isLoading={tvSeriesQuery.isLoading || tvSeriesQuery.isFetching}
-                            isError={!tvSeriesQuery.data?.success || tvSeriesQuery.isError}
+                            list={
+                                tvSeriesQuery.data?.results.slice(0, 12) || []
+                            }
+                            isLoading={
+                                tvSeriesQuery.isLoading ||
+                                tvSeriesQuery.isFetching
+                            }
+                            isError={
+                                !tvSeriesQuery.data?.success ||
+                                tvSeriesQuery.isError
+                            }
                         />
                     </div>
                     <div className="w-full lg:w-[400px] space-y-10">
                         <GenreCard />
-                        <AnimeItemListCard 
+                        <AnimeItemListCard
                             title="Specials"
                             redirectUrlTo="/specials"
                             list={specialsQuery.data?.results || []}
                             showBackground
-                            isError={specialsQuery.isError || (specialsQuery.isSuccess && !specialsQuery.data?.success)}
-                            isLoading={specialsQuery.isLoading || specialsQuery.isFetching}
+                            isError={
+                                specialsQuery.isError ||
+                                (specialsQuery.isSuccess &&
+                                    !specialsQuery.data?.success)
+                            }
+                            isLoading={
+                                specialsQuery.isLoading ||
+                                specialsQuery.isFetching
+                            }
                         />
                     </div>
                 </div>
             </main>
         </>
     );
-};
+}
 
 export default App;

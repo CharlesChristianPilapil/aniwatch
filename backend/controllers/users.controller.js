@@ -7,7 +7,7 @@ export const getUser = async (req, res, next) => {
         return res.status(200).json({success: true, ...data })
     } catch (err) {
         const error = new Error("Something went wrong.");
-        console.log(err);
+        console.error(err);
         return next(error);
     }
 }
