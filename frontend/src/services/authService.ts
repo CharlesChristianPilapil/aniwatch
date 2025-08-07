@@ -58,6 +58,46 @@ export const authService = createApi({
                 method: "POST",
             }),
         }),
+        changePasswordRequest: builder.mutation<
+            LoginResponseType,
+            { email: string }
+        >({
+            query: (data) => ({
+                url: "/reset-password/request",
+                method: "POST",
+                body: data,
+            }),
+        }),
+        verifyResetRequest: builder.mutation<
+            LoginResponseType,
+            { code: string, user_id: number }
+        >({
+            query: (data) => ({
+                url: "/reset-password/verify",
+                method: "POST",
+                body: data,
+            }),
+        }),
+        resendResetRequest: builder.mutation<
+            LoginResponseType,
+            { user_id: number }
+        >({
+            query: (data) => ({
+                url: "/reset-password/resend-code",
+                method: "POST",
+                body: data,
+            }),
+        }),
+        resetPassword: builder.mutation<
+            {success: boolean, message: string},
+            { user_id: number, password: string }
+        >({
+            query:(data) => ({
+                url: "/reset-password/reset",
+                method: "POST",
+                body: data,
+            })
+        })
     }),
 });
 
@@ -67,4 +107,8 @@ export const {
     useVerifyMutation,
     useResendVerificationMutation,
     useLogoutMutation,
+    useChangePasswordRequestMutation,
+    useVerifyResetRequestMutation,
+    useResendResetRequestMutation,
+    useResetPasswordMutation
 } = authService;

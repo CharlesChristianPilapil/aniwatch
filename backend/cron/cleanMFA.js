@@ -9,9 +9,13 @@ cron.schedule("0 * * * *", async () => {
             RETURNING *;
         `;
 
-        console.log(
-            `MFA cleanup ran. Deleted ${deleted.length} expired entries.`
-        );
+        const deletedResetRequest = await sql`
+            DELETE FROM reset_password_codes
+            WHERE expires_at < NOW() - interval '1 hour'
+            RETURNING *;
+        `;
+
+        console.log(`Deleted ${deleted.length} MFA codes, ${deletedResetRequest.length} password reset codes.`);
     } catch (error) {
         console.error("Failed to clean up MFA records:", error);
     }

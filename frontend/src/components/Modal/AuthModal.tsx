@@ -11,21 +11,24 @@ import {
     type VerifyFormData,
     verifySchema,
 } from "../../utils/schema/auth.schema";
-import VerifyForm from "../Form/VerifyForm";
 import RegisterForm from "../Form/RegisterForm";
 import ForgotPasswordForm from "../Form/ForgotPasswordForm";
+import useAuthRefetch from "../../hooks/useAuthRefetch";
+import VerifyCodeForm from "../Form/VerifyCodeForm";
+import type { AuthProcessType } from "../../utils/types/auth.type";
 
 type AuthModalType = {
     isOpen: boolean;
     onClose: () => void;
 };
 
-type ProcessType = "login" | "register" | "verify" | "forgot-password";
 
 const AuthModal = (props: AuthModalType) => {
+    const { refetch } = useAuthRefetch();
+
     const [disableModalActions, setDisableModalActions] =
         useState<boolean>(false);
-    const [currentProcess, setCurrentProcess] = useState<ProcessType>("login");
+    const [currentProcess, setCurrentProcess] = useState<AuthProcessType>("login");
     const [error, setError] = useState<string | undefined>("");
     const [userId, setUserId] = useState<string | undefined>("");
 
@@ -58,7 +61,7 @@ const AuthModal = (props: AuthModalType) => {
         props.onClose();
     };
 
-    const handleProcessChange = (e: ProcessType) => {
+    const handleProcessChange = (e: AuthProcessType) => {
         handleReset();
         setCurrentProcess(e);
     };
@@ -71,7 +74,7 @@ const AuthModal = (props: AuthModalType) => {
         >
             <div className="bg-background/75 backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
                 {currentProcess === "register" && (
-                    <RegisterForm<RegisterFormData, ProcessType>
+                    <RegisterForm<RegisterFormData, AuthProcessType>
                         methods={registerMethod}
                         error={error}
                         onError={setError}
@@ -81,7 +84,7 @@ const AuthModal = (props: AuthModalType) => {
                     />
                 )}
                 {currentProcess === "login" && (
-                    <LoginForm<LoginFormData, ProcessType>
+                    <LoginForm<LoginFormData, AuthProcessType>
                         methods={loginMethod}
                         error={error}
                         onError={setError}
@@ -90,18 +93,26 @@ const AuthModal = (props: AuthModalType) => {
                         disableModalActions={setDisableModalActions}
                     />
                 )}
-                {currentProcess === "verify" && (
-                    <VerifyForm<VerifyFormData, ProcessType>
+                {currentProcess === "verify-code" && (
+                    <VerifyCodeForm<VerifyFormData, AuthProcessType>
                         methods={verifyMethod}
                         error={error}
                         userId={userId ? userId : ""}
-                        onError={setError}
-                        onSuccess={handleCloseModal}
                         onChangeProcess={handleProcessChange}
+                        disableModalActions={setDisableModalActions}
+                        onError={setError}
+                        onSuccess={() => {
+                            handleCloseModal();
+                            refetch();
+                        }}
+                    />
+                )}
+                {currentProcess === "forgot-password" && (
+                    <ForgotPasswordForm  
+                        onChangeProcess={handleProcessChange} 
                         disableModalActions={setDisableModalActions}
                     />
                 )}
-                {currentProcess === "forgot-password" && <ForgotPasswordForm />}
             </div>
         </Modal>
     );

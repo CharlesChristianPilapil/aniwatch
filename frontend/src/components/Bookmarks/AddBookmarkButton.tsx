@@ -12,6 +12,7 @@ import {
     type SyntheticEvent,
     useEffect,
     type KeyboardEvent,
+    type JSX,
 } from "react";
 import {
     useAddBookmarkMutation,
@@ -22,6 +23,13 @@ import AuthModal from "../Modal/AuthModal";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { cleanPayload } from "../../utils/helpers/cleanPayload";
 import toast from "react-hot-toast";
+
+import VisibilityIcon from "@mui/icons-material/Visibility"; // watching
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // completed
+import PauseCircleIcon from "@mui/icons-material/PauseCircle"; // on-hold
+import CancelIcon from "@mui/icons-material/Cancel"; // dropped
+import ScheduleIcon from "@mui/icons-material/Schedule"; // plan-to-watch
+import LiveTvIcon from "@mui/icons-material/LiveTv"; // ongoing
 
 type AddToBookmarkType = {
     payload: {
@@ -52,10 +60,22 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
     };
 
     const [addBookmark] = useAddBookmarkMutation();
-    const { data: bookmarkChecker, refetch: refetchChecker } =
-        useIsBookmarkedQuery({
-            anime_id: payload.anime_id,
-        });
+    const {
+        data: bookmarkChecker,
+        refetch: refetchChecker,
+        isError: isCheckerError,
+    } = useIsBookmarkedQuery({
+        anime_id: payload.anime_id,
+    });
+
+    const bookmarks_icon: Record<BookmarkStatus, JSX.Element> = {
+        watching: <VisibilityIcon />,
+        completed: <CheckCircleIcon />,
+        "on-hold": <PauseCircleIcon />,
+        dropped: <CancelIcon />,
+        "plan-to-watch": <ScheduleIcon />,
+        ongoing: <LiveTvIcon />,
+    };
 
     const bookmark_type: Record<BookmarkStatus, string> = {
         watching: "Watching",
@@ -67,10 +87,11 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
     };
 
     const statusLabel =
-        bookmarkChecker?.isBookmarked && bookmarkChecker.info?.bookmark_status
-            ? bookmark_type[
-                  bookmarkChecker.info.bookmark_status as BookmarkStatus
-              ]
+        !isCheckerError &&
+        bookmarkChecker?.success &&
+        bookmarkChecker.isBookmarked &&
+        bookmarkChecker.info?.bookmark_status
+            ? bookmark_type[bookmarkChecker.info.bookmark_status as BookmarkStatus]
             : "Add to List";
 
     const handleAddBookmark = async (bookmark_status: string) => {
@@ -109,9 +130,7 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
         setOpen(false);
     };
 
-    const handleListKeyDown = (
-        event: KeyboardEvent<HTMLUListElement> | undefined
-    ) => {
+    const handleListKeyDown = (event: KeyboardEvent<HTMLUListElement> | undefined) => {
         if (!event) return;
 
         if (event.key === "Tab") {
@@ -137,9 +156,17 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
             <button
                 ref={anchorRef}
                 onClick={handleToggle}
-                className="bg-main text-background hover:bg-main/90 px-4 py-2 rounded-full flex items-center justify-center gap-1 cursor-pointer w-full"
+                className={`${
+                    !isCheckerError && bookmarkChecker?.isBookmarked
+                        ? "bg-primary-accent text-background hover:bg-primary-accent/80"
+                        : "bg-main text-background hover:bg-main/80"
+                }  px-4 py-2 rounded-full flex items-center justify-center gap-1 cursor-pointer w-full`}
             >
-                <AddIcon />
+                {!isCheckerError && bookmarkChecker?.isBookmarked ? (
+                    bookmarks_icon[bookmarkChecker.info?.bookmark_status as BookmarkStatus]
+                ) : (
+                    <AddIcon />
+                )}
                 {statusLabel}
             </button>
             <Popper
@@ -153,38 +180,25 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
                 {({ TransitionProps, placement }) => (
                     <Grow
                         {...TransitionProps}
-                        style={{
-                            transformOrigin:
-                                placement === "bottom-start"
-                                    ? "left top"
-                                    : "left bottom",
-                        }}
+                        style={{ transformOrigin: placement === "bottom-start" ? "left top" : "left bottom" }}
                     >
-                        <Paper
-                            style={{
-                                width: anchorRef.current?.offsetWidth,
-                            }}
-                        >
+                        <Paper style={{ width: anchorRef.current?.offsetWidth }}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList
                                     autoFocusItem={open}
                                     id="composition-menu"
                                     aria-labelledby="composition-button"
                                     onKeyDown={handleListKeyDown}
-                                    className="my-1 w-full"
+                                    className="my-1 w-full py-0 overflow-hidden rounded-sm"
                                 >
                                     {Object.entries(bookmark_type).map(
                                         ([key, label]) => (
                                             <MenuItem
                                                 key={key}
-                                                onClick={() =>
+                                                onClick={() => {
                                                     handleAddBookmark(key)
-                                                }
-                                                disabled={
-                                                    bookmarkChecker?.info
-                                                        ?.bookmark_status ===
-                                                    key
-                                                }
+                                                }}
+                                                className={`${!isCheckerError && bookmarkChecker?.info?.bookmark_status === key ? "bg-primary-accent text-main" : ""}`}
                                             >
                                                 {label}
                                             </MenuItem>

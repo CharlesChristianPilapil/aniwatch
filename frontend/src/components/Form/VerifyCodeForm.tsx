@@ -21,7 +21,7 @@ type VerifyFormType<T extends VerifyFormData, P> = {
     disableModalActions?: (e: boolean) => void;
 };
 
-const VerifyForm = <T extends VerifyFormData, P>({
+const VerifyCodeForm = <T extends VerifyFormData, P>({
     userId,
     methods,
     error,
@@ -64,7 +64,6 @@ const VerifyForm = <T extends VerifyFormData, P>({
 
         const payload = { ...data, user_id: userId };
         const toastId = toast.loading("Verifying account...");
-
         try {
             const res = await verifyMutation(payload).unwrap();
             toast.success("Account logged in.", { id: toastId });
@@ -126,4 +125,4 @@ const VerifyForm = <T extends VerifyFormData, P>({
     );
 };
 
-export default VerifyForm;
+export default VerifyCodeForm;

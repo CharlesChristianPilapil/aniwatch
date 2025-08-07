@@ -3,10 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import SideBar from "./SideBar";
 import SearchIcon from "@mui/icons-material/Search";
 import useGetScreenSize from "../../hooks/useGetScreenSize";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useDispatch } from "react-redux";
-import { logout } from "../../slices/authSlice";
-import { useLogoutMutation } from "../../services/authService";
+
+import ProfileMenu from "../ProfileMenu";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -15,9 +13,6 @@ const Navbar = () => {
 
     const [toggle, setToggle] = useState<boolean>(false);
     const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
-
-    const dispatch = useDispatch();
-    const [logoutMutation] = useLogoutMutation();
 
     useEffect(() => {
         if (toggle || showSearchBar) {
@@ -140,18 +135,7 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-                    <div
-                        onClick={() => {
-                            dispatch(logout());
-                            logoutMutation({}).unwrap();
-                            alert("Logged out");
-                        }}
-                    >
-                        <div className="flex items-center gap-2">
-                            <h2> Guest </h2>{" "}
-                            <AccountCircleIcon className="text-main h-8 w-8" />
-                        </div>
-                    </div>
+                    <ProfileMenu />
                 </div>
             </div>
             <SideBar

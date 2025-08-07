@@ -7,8 +7,9 @@ import type { LoginFormData } from "../../utils/schema/auth.schema";
 import formatTime from "../../utils/helpers/formatTime";
 import useTimerLockout from "../../hooks/useTimerLockout";
 import toast from "react-hot-toast";
+import type { AuthProcessType } from "../../utils/types/auth.type";
 
-type LoginFormType<T extends LoginFormData, P> = {
+type LoginFormType<T extends LoginFormData, P extends AuthProcessType> = {
     methods: ReturnType<typeof useForm<T>>;
     error?: string;
     onProcessChange: (e: P) => void;
@@ -17,7 +18,7 @@ type LoginFormType<T extends LoginFormData, P> = {
     setUserId: (e: string | undefined) => void;
 };
 
-const LoginForm = <T extends LoginFormData, P>({
+const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
     methods,
     error,
     onError,
@@ -45,7 +46,7 @@ const LoginForm = <T extends LoginFormData, P>({
         try {
             const res = await loginMutation(data).unwrap();
             if (res.success) {
-                onProcessChange("verify" as P);
+                onProcessChange("verify-code" as P);
                 toast.success("Verification code sent to your email.", {
                     id: toastId,
                 });
@@ -114,7 +115,7 @@ const LoginForm = <T extends LoginFormData, P>({
                     Forgot Password
                 </button>
             </form>
-            <div className="text-center">
+            <div className="text-center text-sm">
                 <p className="inline-block">{`Don't have an account?`} </p>{" "}
                 <button
                     disabled={isLoginLoading}

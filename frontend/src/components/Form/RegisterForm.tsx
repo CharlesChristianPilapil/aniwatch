@@ -5,8 +5,9 @@ import Button from "../Button";
 import { useRegisterMutation } from "../../services/authService";
 import type { CatchErrorType } from "../../utils/types/error.type";
 import toast from "react-hot-toast";
+import type { AuthProcessType } from "../../utils/types/auth.type";
 
-type RegisterFormType<T extends RegisterFormData, P> = {
+type RegisterFormType<T extends RegisterFormData, P extends AuthProcessType> = {
     methods: ReturnType<typeof useForm<T>>;
     error?: string;
     onProcessChange: (e: P) => void;
@@ -15,7 +16,7 @@ type RegisterFormType<T extends RegisterFormData, P> = {
     setUserId: (e: string | undefined) => void;
 };
 
-const RegisterForm = <T extends RegisterFormData, P>({
+const RegisterForm = <T extends RegisterFormData, P extends AuthProcessType>({
     methods,
     error,
     onProcessChange,
@@ -43,7 +44,7 @@ const RegisterForm = <T extends RegisterFormData, P>({
         try {
             const res = await registerMutation(payload).unwrap();
             if (res.success) {
-                onProcessChange("verify" as P);
+                onProcessChange("verify-code" as P);
                 toast.success("Verification code sent to your email.", {
                     id: toastId,
                 });

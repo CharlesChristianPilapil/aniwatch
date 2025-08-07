@@ -17,28 +17,27 @@ import GenreListPage from "../pages/GenreList.page";
 import SearchAnimePage from "../pages/SearchAnime.page";
 import AuthTest from "../pages/AuthTest";
 
-
 export const router = createBrowserRouter([
-    { 
-        path: '/', 
+    {
+        path: "/",
         element: <RootLayout />,
         children: [
             { index: true, element: <App /> },
-            { path: '/top-airing', element: <TopAiringPage /> },
-            { path: '/most-popular', element: <MostPopularPage /> },
-            { path: '/recently-added', element: <RecentlyAddedPage /> },
-            { path: '/recent-episodes', element: <RecentEpisodesPage /> },
-            { path: '/tv', element: <TvSeriesPage /> },
-            { path: '/ona', element: <ONAsPage /> },
-            { path: '/ova', element: <OVAsPage /> },
-            { path: '/specials', element: <SpecialsPage /> },
-            { path: '/movies', element: <MoviesPage /> },
-            { path: '/info/:id', element: <AnimeInfoPage /> },
-            { path: '/watch/:episodeId', element: <WatchPage /> },
-            { path: '/genre/:genre', element: <GenreListPage /> },
-            { path: '/search/:query', element: <SearchAnimePage /> },
-            { path: '/auth', element: <AuthTest /> },
-            { path: '*', element: <ErrorPage /> }
-        ] 
+            { path: "/top-airing", element: <TopAiringPage /> },
+            { path: "/most-popular", element: <MostPopularPage /> },
+            { path: "/recently-added", element: <RecentlyAddedPage /> },
+            { path: "/recent-episodes", element: <RecentEpisodesPage /> },
+            { path: "/tv", element: <TvSeriesPage /> },
+            { path: "/ona", element: <ONAsPage /> },
+            { path: "/ova", element: <OVAsPage /> },
+            { path: "/specials", element: <SpecialsPage /> },
+            { path: "/movies", element: <MoviesPage /> },
+            { path: "/info/:id", element: <AnimeInfoPage /> },
+            { path: "/watch/:episodeId", element: <WatchPage /> },
+            { path: "/genre/:genre", element: <GenreListPage /> },
+            { path: "/search/:query", element: <SearchAnimePage /> },
+            { path: "/auth", element: <AuthTest /> },
+            { path: "*", element: <ErrorPage /> },
+        ],
     },
 ]);

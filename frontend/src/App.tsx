@@ -105,28 +105,30 @@ function App() {
                             {" "}
                             Welcome to{" "}
                             <span className="text-primary-accent">
-                                {" "}
                                 AniWatch{" "}
                             </span>{" "}
                         </h2>
                         <div className="space-y-4">
                             <p>
-                                {" "}
-                                Stream your favorite anime for free. Built as a
-                                personal project for learning and exploration.{" "}
+                                AniWatch is a personal project built to explore
+                                and learn modern web technologies, offering a
+                                seamless anime streaming experience — all for
+                                free.
                             </p>
                             <p>
-                                Built with modern web technologies, this
-                                platform is constantly evolving, integrating new
-                                features, and refining performance. Whether
-                                you're into classic titles or the latest
-                                seasonal releases, AniWatch is your go-to hub
-                                for all things anime.
+                                Continuously evolving with new features and
+                                performance improvements, AniWatch lets you dive
+                                into everything from timeless classics to the
+                                latest seasonal hits.
                             </p>
                             <p>
-                                {" "}
-                                Explore, discover, and enjoy anime like never
-                                before.{" "}
+                                Discover, stream, and enjoy anime like never
+                                before.
+                                <span className="block mt-1">
+                                    (P.S. It's hosted on a free tier, so initial
+                                    loading might take a bit longer — I'm broke
+                                    😅.)
+                                </span>
                             </p>
                         </div>
                     </div>

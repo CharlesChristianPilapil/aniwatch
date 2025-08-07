@@ -6,7 +6,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 const AnimeCard = (props: AnimeCardType) => {
     return (
         <Card className="bg-transparent text-main space-y-2">
-            <div className="group relative after:absolute after:bottom-0 after:left-0 after:h-[40px] after:w-full after:bg-gradient-to-t after:from-background after:to-transparent after:content-['']">
+            <div className="relative after:absolute after:bottom-0 after:left-0 after:h-[40px] after:w-full after:bg-gradient-to-t after:from-background after:to-transparent after:content-['']">
                 <CardMedia
                     component="img"
                     image={props.image}
@@ -15,7 +15,7 @@ const AnimeCard = (props: AnimeCardType) => {
                 />
                 <Link
                     to={`/info/${props.id}`}
-                    className="absolute top-0 left-0 w-full h-full bg-background/25 backdrop-blur-sm flex items-center justify-center invisible opacity-0 group-hover:opacity-100 group-hover:visible group-hover:focus:visible transition-all duration-200 outline-none"
+                    className="absolute top-0 left-0 w-full h-full bg-background/25 backdrop-blur-sm flex items-center justify-center opacity-0 hover:opacity-100 focus:opacity-100 transition-all duration-200 outline-none"
                 >
                     <PlayArrowIcon className="h-20 w-20 text-main" />
                 </Link>

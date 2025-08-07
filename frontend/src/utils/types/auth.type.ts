@@ -9,3 +9,5 @@ export type VerificationResponseType = {
     username: string;
     email: string;
 };
+
+export type AuthProcessType = "login" | "register" | "verify-code" | "forgot-password";

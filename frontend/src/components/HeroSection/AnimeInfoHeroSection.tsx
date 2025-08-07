@@ -28,44 +28,28 @@ const AnimeInfoHeroSection = () => {
                 <div className="flex flex-1 md:flex-row md:items-start items-center justify-center flex-col gap-4 pt-10 md:pb-10">
                     <div className="relative w-[210px] aspect-[2/3]">
                         {showLoaders ? (
-                            <Skeleton
-                                className="h-full w-full"
-                                sx={{ transform: "unset" }}
-                            />
+                            <Skeleton className="h-full w-full" sx={{ transform: "unset" }} />
                         ) : (
                             <img
                                 src={data?.image}
-                                alt={`${data?.title} cover.`}
-                                className="object-cover w-full h-full rounded-sm"
+                                alt={`${data?.title} cover.`} 
+                                className="object-cover w-full h-full rounded-sm" 
                             />
                         )}
                     </div>
                     <div className="w-full space-y-4 flex flex-col items-center md:items-start flex-1">
                         {showLoaders ? (
                             <div className="w-full flex flex-col justify-center gap-1">
-                                <Skeleton
-                                    className="hidden md:block w-full lg:max-w-[764px]"
-                                    sx={{ transform: "unset" }}
-                                />
-                                <Skeleton
-                                    className="max-w-[764px] h-[40px]"
-                                    sx={{ transform: "unset" }}
-                                />
-                                <Skeleton
-                                    className="w-[255px] h-[60px] mx-auto md:mx-0"
-                                    sx={{ transform: "unset" }}
-                                />
-                                <Skeleton
-                                    className="hidden md:block max-w-[764px] h-[250px]"
-                                    sx={{ transform: "unset" }}
-                                />
+                                <Skeleton className="hidden md:block w-full lg:max-w-[764px]" sx={{ transform: "unset" }} />
+                                <Skeleton className="max-w-[764px] h-[40px]" sx={{ transform: "unset" }} />
+                                <Skeleton className="w-[255px] h-[60px] mx-auto md:mx-0" sx={{ transform: "unset" }} />
+                                <Skeleton className="hidden md:block max-w-[764px] h-[250px]" sx={{ transform: "unset" }} />
                             </div>
                         ) : (
                             <>
                                 <div className="hidden md:flex gap-2">
                                     <Link
-                                        to={"/"}
-                                        className="hover:text-secondary-accent hover:underline"
+                                        to={"/"} className="hover:text-secondary-accent hover:underline"
                                     >
                                         Home
                                     </Link>{" "}
@@ -73,8 +57,7 @@ const AnimeInfoHeroSection = () => {
                                     <Link
                                         to={`/${
                                             data?.type?.toLowerCase() ?? ""
-                                        }`}
-                                        className="hover:text-secondary-accent hover:underline"
+                                        }`} className="hover:text-secondary-accent hover:underline"
                                     >
                                         {data?.type || "N/A"}
                                     </Link>{" "}
@@ -88,8 +71,7 @@ const AnimeInfoHeroSection = () => {
                                 </h2>
                                 <div className="grid grid-cols-2 gap-2 text-sm">
                                     <Link
-                                        to={`/watch/${data?.episodes[0]?.id}`}
-                                        className="h-full bg-secondary-accent text-background hover:bg-secondary-accent/90 px-4 py-2 rounded-full flex gap-1 items-center"
+                                        to={`/watch/${data?.episodes[0]?.id}`} className="h-full bg-secondary-accent text-background hover:bg-secondary-accent/90 px-4 py-2 rounded-full flex gap-1 items-center"
                                     >
                                         <PlayArrowIcon />
                                         Watch Now
@@ -101,8 +83,7 @@ const AnimeInfoHeroSection = () => {
                                             image: data.image,
                                             type: data.type,
                                             anime_status: data.status,
-                                        }}
-                                    />
+                                        }} />
                                 </div>
                                 <p className="max-w-[764px] lg:min-h-[240px] hidden md:block">
                                     {data?.description}{" "}
@@ -114,69 +95,41 @@ const AnimeInfoHeroSection = () => {
                 <div className="lg:bg-main/25 w-full lg:w-[300px] xl:w-[400px] lg:pt-10 px-4 md:pb-10 space-y-2">
                     {showLoaders ? (
                         <div className="w-full flex flex-col gap-2">
-                            <Skeleton
-                                className="h-[32px] lg:hidden"
-                                sx={{ transform: "unset" }}
-                            />
-                            <Skeleton
-                                className="h-[100px] md:h-[150px] lg:hidden"
-                                sx={{ transform: "unset" }}
-                            />
-                            <Skeleton
-                                className="h-[32px]"
-                                sx={{ transform: "unset" }}
-                            />
-                            <Skeleton
-                                className="h-[32px]"
-                                sx={{ transform: "unset" }}
-                            />
-                            <Skeleton
-                                className="h-[32px]"
-                                sx={{ transform: "unset" }}
-                            />
-                            <Skeleton
-                                className="h-[32px]"
-                                sx={{ transform: "unset" }}
-                            />
-                            <Skeleton
-                                className="h-[32px]"
-                                sx={{ transform: "unset" }}
-                            />
+                            <Skeleton className="h-[32px] lg:hidden" sx={{ transform: "unset" }}/>
+                            <Skeleton className="h-[100px] md:h-[150px] lg:hidden" sx={{ transform: "unset" }} />
+                            <Skeleton className="h-[32px]" sx={{ transform: "unset" }} />
+                            <Skeleton className="h-[32px]" sx={{ transform: "unset" }} />
+                            <Skeleton className="h-[32px]" sx={{ transform: "unset" }} />
+                            <Skeleton className="h-[32px]" sx={{ transform: "unset" }} />
+                            <Skeleton className="h-[32px]" sx={{ transform: "unset" }} />
                         </div>
                     ) : (
                         <>
                             <div className="py-2 space-y-1 md:hidden">
                                 <p className="font-semibold"> Overview: </p>
                                 <p className="max-h-[100px] sm:max-h-[150px] overflow-y-scroll pr-2">
-                                    {" "}
                                     {data?.description}{" "}
                                 </p>
                             </div>
                             <p className="whitespace-nowrap text-ellipsis overflow-hidden">
-                                {" "}
                                 <span className="font-semibold">
-                                    {" "}
                                     Japanese:{" "}
                                 </span>{" "}
                                 {data?.japaneseTitle}{" "}
                             </p>
                             <p>
-                                {" "}
                                 <strong className=""> Premiered: </strong>{" "}
                                 {data?.season || "N/A"}{" "}
                             </p>
                             <p>
-                                {" "}
                                 <strong className=""> Type: </strong>{" "}
                                 {data?.type || "N/A"}{" "}
                             </p>
                             <p>
-                                {" "}
                                 <strong className=""> Episodes: </strong>{" "}
                                 {data?.totalEpisodes || "N/A"}{" "}
                             </p>
                             <p>
-                                {" "}
                                 <strong className=""> Status: </strong>{" "}
                                 {data?.status || "N/A"}{" "}
                             </p>
@@ -185,10 +138,7 @@ const AnimeInfoHeroSection = () => {
                                 {data?.genres?.map((genre) => (
                                     <Link
                                         key={genre}
-                                        to={`/genre/${genre
-                                            .replace(/\s+/g, "-")
-                                            .toLowerCase()}`}
-                                        className="px-2 py-1 border border-main rounded-full text-xs hover:bg-background hover:text-secondary-accent"
+                                        to={`/genre/${genre.replace(/\s+/g, "-").toLowerCase()}`} className="px-2 py-1 border border-main rounded-full text-xs hover:bg-background hover:text-secondary-accent"
                                     >
                                         {genre}
                                     </Link>
