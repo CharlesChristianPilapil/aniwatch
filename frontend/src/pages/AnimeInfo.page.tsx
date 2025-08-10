@@ -19,7 +19,7 @@ const AnimeInfoPage = () => {
 
     if ((!data?.success && !isLoading && !isFetching) || isError) {
         return (
-            <main className="container py-20 text-center min-h-[calc(100vh-68px)] md:min-h-[calc(100vh-80px)] flex flex-col items-center justify-center gap-4">
+            <main className="container pb-20 pt-[calc(80px-72px)] md:pt-0 text-center min-h-[calc(100vh-72px)] md:min-h-[calc(100vh-80px)] flex flex-col items-center justify-center gap-4">
                 <img 
                     alt="image of saitama"
                     src="/images/saitama.png"
