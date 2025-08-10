@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import useGetScreenSize from "../../hooks/useGetScreenSize";
 
 import ProfileMenu from "../ProfileMenu";
+import { useScrollTrigger } from "@mui/material";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -31,6 +32,11 @@ const Navbar = () => {
         }
     };
 
+    const trigger = useScrollTrigger({
+        threshold: 50,
+        disableHysteresis: true,
+    })
+
     useEffect(() => {
         if (width >= 640 && showSearchBar) {
             setShowSearchBar(false);
@@ -38,7 +44,7 @@ const Navbar = () => {
     }, [width, showSearchBar]);
 
     return (
-        <nav>
+        <nav className={`sticky top-0 z-8 ${trigger ? "bg-background/75 backdrop-blur-sm shadow-md" : "bg-background"}`}>
             <div className="container py-5 flex items-center justify-between gap-5">
                 <div className="flex items-center gap-10">
                     <div className="flex items-center gap-4">

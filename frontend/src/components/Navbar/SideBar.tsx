@@ -86,8 +86,7 @@ const SideBar = ({ isToggled = false, onToggle }: SideBarType) => {
                 {((data && data?.genres?.length > 0) || !isError) && (
                     <div className="space-y-4 mt-4">
                         <h2 className="px-4 font-semibold text-primary-accent">
-                            {" "}
-                            Genres{" "}
+                            Genres
                         </h2>
                         <ul className="grid grid-cols-2 gap-x-2 pr-4">
                             {data?.genres
@@ -116,7 +115,7 @@ const SideBar = ({ isToggled = false, onToggle }: SideBarType) => {
                                 onClick={() =>
                                     setShowGenre((prevVal) => !prevVal)
                                 }
-                                className="w-full bg-background/50 hover:text-primary-accent hover:bg-background/75 focus:bg-background/50 focus:text-primary-accent outline-primary-accent py-2 cursor-pointer"
+                                className="w-full rounded bg-background/50 hover:text-primary-accent hover:bg-background/75 focus:bg-background/50 focus:text-primary-accent outline-primary-accent py-2 cursor-pointer"
                             >
                                 {!showGenre ? "Show More" : "Show Less"}
                             </button>

@@ -1,23 +1,17 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import baseUrl from "../utils/constants/baseApiUrl";
 import type {
     LoginResponseType,
     VerificationResponseType,
 } from "../utils/types/auth.type";
+import { api } from "./baseApiService";
 
-export const authService = createApi({
-    reducerPath: "auth-services",
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${baseUrl}/auth/`,
-        credentials: "include",
-    }),
+export const authService = api.injectEndpoints({
     endpoints: (builder) => ({
         register: builder.mutation<
             LoginResponseType,
             { name: string; username: string; email: string; password: string }
         >({
             query: (data) => ({
-                url: "/register",
+                url: "/auth/register",
                 method: "POST",
                 body: data,
             }),
@@ -27,7 +21,7 @@ export const authService = createApi({
             { identifier: string; password: string }
         >({
             query: (data) => ({
-                url: "/login",
+                url: "/auth/login",
                 method: "POST",
                 body: data,
             }),
@@ -37,33 +31,35 @@ export const authService = createApi({
             Record<string, unknown>
         >({
             query: (data) => ({
-                url: "/verify",
+                url: "/auth/verify",
                 method: "POST",
                 body: data,
             }),
+            invalidatesTags: ["isAnimeBookmarked"],
         }),
         resendVerification: builder.mutation<
             { success: boolean; message: string },
             { user_id: number }
         >({
             query: (data) => ({
-                url: "/resend",
+                url: "/auth/resend",
                 method: "POST",
                 body: data,
             }),
         }),
         logout: builder.mutation({
             query: () => ({
-                url: "/logout",
+                url: "/auth/logout",
                 method: "POST",
             }),
+            invalidatesTags: ["isAnimeBookmarked"],
         }),
         changePasswordRequest: builder.mutation<
             LoginResponseType,
             { email: string }
         >({
             query: (data) => ({
-                url: "/reset-password/request",
+                url: "/auth/reset-password/request",
                 method: "POST",
                 body: data,
             }),
@@ -73,7 +69,7 @@ export const authService = createApi({
             { code: string, user_id: number }
         >({
             query: (data) => ({
-                url: "/reset-password/verify",
+                url: "/auth/reset-password/verify",
                 method: "POST",
                 body: data,
             }),
@@ -83,7 +79,7 @@ export const authService = createApi({
             { user_id: number }
         >({
             query: (data) => ({
-                url: "/reset-password/resend-code",
+                url: "/auth/reset-password/resend-code",
                 method: "POST",
                 body: data,
             }),
@@ -93,7 +89,7 @@ export const authService = createApi({
             { user_id: number, password: string }
         >({
             query:(data) => ({
-                url: "/reset-password/reset",
+                url: "/auth/reset-password/reset",
                 method: "POST",
                 body: data,
             })

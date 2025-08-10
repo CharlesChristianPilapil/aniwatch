@@ -1,3 +1,5 @@
+import type { UserInfoType } from "./users.type";
+
 export type LoginResponseType = {
     success: boolean;
     message: boolean;
@@ -5,9 +7,9 @@ export type LoginResponseType = {
 };
 
 export type VerificationResponseType = {
-    id: number;
-    username: string;
-    email: string;
+    success: boolean;
+    message: string;
+    data: UserInfoType;
 };
 
 export type AuthProcessType = "login" | "register" | "verify-code" | "forgot-password";

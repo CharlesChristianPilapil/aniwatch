@@ -3,15 +3,10 @@ import { useParams, Link } from "react-router-dom";
 import { useGetAnimeInfoQuery } from "../../services/animeApiQuery";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import AddBookmarkButton from "../Bookmarks/AddBookmarkButton";
-// import { useSelector } from "react-redux";
-// import type { RootState } from "../../store";
 
 const AnimeInfoHeroSection = () => {
     const { id } = useParams();
     const { data, isLoading, isFetching } = useGetAnimeInfoQuery({ id: id! });
-    // const user = useSelector((state: RootState) => state.auth.userInfo);
-    // const dispatch = useDispatch();
-
     const showLoaders = !data?.success || isLoading || isFetching;
 
     return (

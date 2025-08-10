@@ -20,6 +20,11 @@ const AnimeInfoPage = () => {
     if ((!data?.success && !isLoading && !isFetching) || isError) {
         return (
             <main className="container py-20 text-center min-h-[calc(100vh-68px)] md:min-h-[calc(100vh-80px)] flex flex-col items-center justify-center gap-4">
+                <img 
+                    alt="image of saitama"
+                    src="/images/saitama.png"
+                    className="max-w-[300px]" 
+                />
                 <h2 className="text-2xl font-semibol">Anime not found</h2>
                 <p>
                     The anime you're looking for doesn't exist or the ID is
@@ -27,7 +32,7 @@ const AnimeInfoPage = () => {
                 </p>
                 <Link
                     to="/"
-                    className="px-4 py-2 bg-primary text-main rounded hover:text-secondary-accent hover:underline"
+                    className="px-4 py-2 bg-primary text-main rounded hover:text-secondary-accent underline"
                 >
                     Go back home
                 </Link>

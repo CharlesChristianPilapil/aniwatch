@@ -37,11 +37,7 @@ const AnimeItemListCard = ({
             ) : (
                 <h2 className="sub-header"> {title} </h2>
             )}
-            <div
-                className={`${isLoading ? "space-y-2" : "space-y-4"} ${
-                    showBackground ? "bg-main/10 px-2 pt-2 pb-4 rounded" : ""
-                }`}
-            >
+            <div className={`${isLoading ? "space-y-2" : "space-y-4"} ${showBackground ? "bg-main/10 px-2 pt-2 pb-4 rounded" : ""}`}>
                 <div className="flex flex-col">
                     {list?.slice(0, itemCount).map((data) => (
                         <AnimeItem

@@ -1,71 +1,66 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type {
     AnimeEpisodeType,
     AnimeInfoType,
     AnimeListResponseType,
     GenreListType,
 } from "../utils/types/anime.type";
-import baseUrl from "../utils/constants/baseApiUrl";
+import { api } from "./baseApiService";
 
-export const animeApiQuery = createApi({
-    reducerPath: "anime-api",
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${baseUrl}/api/anime`,
-    }),
+export const animeApiQuery = api.injectEndpoints({
     endpoints: (builder) => ({
         getTopAiring: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/top-airing?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/top-airing?page=${page}`,
         }),
         getRecentlyAdded: builder.query<
             AnimeListResponseType,
             { page: number }
         >({
-            query: ({ page = 1 }) => `/recently-added?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/recently-added?page=${page}`,
         }),
         getRecentEpisodes: builder.query<
             AnimeListResponseType,
             { page: number }
         >({
-            query: ({ page = 1 }) => `/recent-episodes?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/recent-episodes?page=${page}`,
         }),
         getMostPopular: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/most-popular?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/most-popular?page=${page}`,
         }),
         getMovies: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/movies?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/movies?page=${page}`,
         }),
         getOna: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/ona?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/ona?page=${page}`,
         }),
         getOva: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/ova?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/ova?page=${page}`,
         }),
         getSpecials: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/specials?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/specials?page=${page}`,
         }),
         getTv: builder.query<AnimeListResponseType, { page: number }>({
-            query: ({ page = 1 }) => `/tv?page=${page}`,
+            query: ({ page = 1 }) => `/api/anime/tv?page=${page}`,
         }),
         getAnimeInfo: builder.query<AnimeInfoType, { id: string }>({
-            query: ({ id }) => `/info/${id}`,
+            query: ({ id }) => `/api/anime/info/${id}`,
         }),
         getAnimeEpisode: builder.query<AnimeEpisodeType, { id: string }>({
-            query: ({ id }) => `/watch/${id}`,
+            query: ({ id }) => `/api/anime/watch/${id}`,
         }),
         getGenreList: builder.query<GenreListType, void>({
-            query: () => `/genre/list`,
+            query: () => `/api/anime/genre/list`,
         }),
         getListByGenre: builder.query<
             AnimeListResponseType,
             { genre: string; page: number }
         >({
-            query: ({ genre, page }) => `/genre/${genre}?page=${page}`,
+            query: ({ genre, page }) => `/api/anime/genre/${genre}?page=${page}`,
         }),
         getListByQuery: builder.query<
             AnimeListResponseType,
             { query: string; page: number }
         >({
-            query: ({ query, page }) => `/${query}?page=${page}`,
+            query: ({ query, page }) => `/api/anime/${query}?page=${page}`,
         }),
     }),
 });

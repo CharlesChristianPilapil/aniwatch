@@ -1,26 +1,34 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../services/authService";
 import { logout } from "../../slices/authSlice";
 import toast from "react-hot-toast";
-import useAuthRefetch from "../../hooks/useAuthRefetch";
 import { Divider, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
 import { useState, type MouseEvent } from "react";
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import type { CatchErrorType } from "../../utils/types/error.type";
+import type { CatchErrorType } from "../../utils/types/error.type";import type { RootState } from "../../store";
+import { Link } from "react-router-dom";
+import AuthModal from "../Modal/AuthModal";
 
-const ProfileMenu = () => {
-    const { refetch } = useAuthRefetch();
+const ProfileMenu = () => {    
+    const userInfo = useSelector((state: RootState) => state.auth.userInfo);
     const dispatch = useDispatch();
     const [logoutMutation] = useLogoutMutation();
 
-
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
-    const handleClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+    const handleClick = (event: MouseEvent<HTMLElement>) => {
+        if (!userInfo) {
+            setIsModalOpen(true);
+            return;
+        }
+
+        setAnchorEl(event.currentTarget)
+    };
     const handleClose = () => setAnchorEl(null);
 
     const handleLogout = async () => {
@@ -28,7 +36,6 @@ const ProfileMenu = () => {
         try {
             await logoutMutation({}).unwrap();
             dispatch(logout());
-            refetch();
             toast.success("You’ve been signed out.", { id: toastId });
         } catch (error) {
             console.error(error);
@@ -44,7 +51,9 @@ const ProfileMenu = () => {
     return (
         <div>
             <div className="flex items-center gap-2">
-                <h2 className="hidden md:block"> Guest </h2>{" "}
+                <h2 className="hidden md:block"> 
+                    {userInfo?.username || "Guest"} 
+                </h2>
                 <Tooltip 
                     title="Profile Settings" 
                     placement="bottom-end"
@@ -94,7 +103,11 @@ const ProfileMenu = () => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem 
+                        component={Link}
+                        onClick={handleClose} 
+                        to={`/profile/${userInfo?.username.toLowerCase()}`}
+                    >
                         <ListItemIcon> <AccountCircleIcon fontSize="medium" /> </ListItemIcon>
                         Profile
                     </MenuItem>
@@ -119,6 +132,10 @@ const ProfileMenu = () => {
                     </MenuItem>
                 </Menu>
             </div>
+            <AuthModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </div>
     );
 };

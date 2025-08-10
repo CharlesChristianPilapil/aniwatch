@@ -13,7 +13,6 @@ import {
 } from "../../utils/schema/auth.schema";
 import RegisterForm from "../Form/RegisterForm";
 import ForgotPasswordForm from "../Form/ForgotPasswordForm";
-import useAuthRefetch from "../../hooks/useAuthRefetch";
 import VerifyCodeForm from "../Form/VerifyCodeForm";
 import type { AuthProcessType } from "../../utils/types/auth.type";
 
@@ -24,8 +23,6 @@ type AuthModalType = {
 
 
 const AuthModal = (props: AuthModalType) => {
-    const { refetch } = useAuthRefetch();
-
     const [disableModalActions, setDisableModalActions] = useState<boolean>(false);
     const [currentProcess, setCurrentProcess] = useState<AuthProcessType>("login");
     const [error, setError] = useState<string | undefined>("");
@@ -102,10 +99,7 @@ const AuthModal = (props: AuthModalType) => {
                             onChangeProcess={handleProcessChange}
                             disableModalActions={setDisableModalActions}
                             onError={setError}
-                            onSuccess={() => {
-                                handleCloseModal();
-                                refetch();
-                            }}
+                            onSuccess={() => handleCloseModal()}
                         />
                     )}
                     {currentProcess === "forgot-password" && (

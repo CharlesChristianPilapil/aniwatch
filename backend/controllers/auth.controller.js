@@ -207,7 +207,7 @@ export const verify = async (req, res, next) => {
     try {
         const [record] = await sql`
             SELECT * FROM email_code_mfa
-            WHERE code = ${code} AND user_id = ${user_id};
+            WHERE code = ${code} AND user_id = ${user_id} AND is_used = false;
         `;
 
         if (!record) {
@@ -224,6 +224,12 @@ export const verify = async (req, res, next) => {
             error.status = 400;
             return next(error);
         }
+
+        await sql`
+            UPDATE email_code_mfa
+            SET is_used = true
+            WHERE id = ${record.id};
+        `;
 
         return signInHandler(record);
     } catch (err) {

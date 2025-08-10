@@ -10,6 +10,8 @@ import type { CatchErrorType } from "../../utils/types/error.type";
 import toast from "react-hot-toast";
 import type { Path, useForm } from "react-hook-form";
 import type { VerifyFormData } from "../../utils/schema/auth.schema";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../slices/authSlice";
 
 type VerifyFormType<T extends VerifyFormData, P> = {
     methods: ReturnType<typeof useForm<T>>;
@@ -34,6 +36,8 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
         key: "aniwatch_otp_lockout",
         minimum: 3,
     });
+
+    const dispatch = useDispatch();
 
     const {
         register,
@@ -67,7 +71,7 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
         try {
             const res = await verifyMutation(payload).unwrap();
             toast.success("Account logged in.", { id: toastId });
-            console.log(res);
+            dispatch(setCredentials(res.data));
             onSuccess();
         } catch (error) {
             toast.dismiss();

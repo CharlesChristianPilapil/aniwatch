@@ -1,19 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { UserInfoType } from "../utils/types/users.type";
 
-export type UserInfo = {
-    id: number;
-    username: string;
-    email: string;
-    name: string;
-    avatar_image: string | null;
-    cover_image: string | null;
-    city: string | null;
-    website: string | null;
-}
+const user_info = "aniwatch_user_info";
 
-const userJson = localStorage.getItem("userInfo");
+const userJson = localStorage.getItem(user_info);
 const initialState = {
-    userInfo: userJson ? JSON.parse(userJson) as UserInfo : null,
+    userInfo: userJson ? JSON.parse(userJson) as UserInfoType : null,
 }
 
 const authSlice = createSlice({
@@ -22,11 +14,11 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             state.userInfo = action.payload;
-            localStorage.setItem("userInfo", JSON.stringify(action.payload));
+            localStorage.setItem(user_info, JSON.stringify(action.payload));
         },
         logout: (state) => {
             state.userInfo = null;
-            localStorage.removeItem("userInfo");
+            localStorage.removeItem(user_info);
         }
     }
 });
