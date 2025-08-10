@@ -25,11 +25,8 @@ const AnimeInfoPage = () => {
                     src="/images/saitama.png"
                     className="max-w-[300px]" 
                 />
-                <h2 className="text-2xl font-semibol">Anime not found</h2>
-                <p>
-                    The anime you're looking for doesn't exist or the ID is
-                    invalid.
-                </p>
+                <h2 className="text-2xl font-semibold">Anime not found</h2>
+                <p>No anime found. It either doesn’t exist… or you messed up the ID.</p>
                 <Link
                     to="/"
                     className="px-4 py-2 bg-primary text-main rounded hover:text-secondary-accent underline"
