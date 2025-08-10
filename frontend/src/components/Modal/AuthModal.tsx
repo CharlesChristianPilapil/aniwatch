@@ -1,4 +1,4 @@
-import { Modal } from "@mui/material";
+import { Fade, Modal } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,8 +26,7 @@ type AuthModalType = {
 const AuthModal = (props: AuthModalType) => {
     const { refetch } = useAuthRefetch();
 
-    const [disableModalActions, setDisableModalActions] =
-        useState<boolean>(false);
+    const [disableModalActions, setDisableModalActions] = useState<boolean>(false);
     const [currentProcess, setCurrentProcess] = useState<AuthProcessType>("login");
     const [error, setError] = useState<string | undefined>("");
     const [userId, setUserId] = useState<string | undefined>("");
@@ -70,50 +69,53 @@ const AuthModal = (props: AuthModalType) => {
         <Modal
             open={props.isOpen}
             onClose={handleCloseModal}
+            closeAfterTransition
             className="flex items-center justify-center px-5 py-10 overflow-y-scroll overflow-x-hidden"
         >
-            <div className="bg-background/75 backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
-                {currentProcess === "register" && (
-                    <RegisterForm<RegisterFormData, AuthProcessType>
-                        methods={registerMethod}
-                        error={error}
-                        onError={setError}
-                        setUserId={setUserId}
-                        onProcessChange={handleProcessChange}
-                        disableModalActions={setDisableModalActions}
-                    />
-                )}
-                {currentProcess === "login" && (
-                    <LoginForm<LoginFormData, AuthProcessType>
-                        methods={loginMethod}
-                        error={error}
-                        onError={setError}
-                        setUserId={setUserId}
-                        onProcessChange={handleProcessChange}
-                        disableModalActions={setDisableModalActions}
-                    />
-                )}
-                {currentProcess === "verify-code" && (
-                    <VerifyCodeForm<VerifyFormData, AuthProcessType>
-                        methods={verifyMethod}
-                        error={error}
-                        userId={userId ? userId : ""}
-                        onChangeProcess={handleProcessChange}
-                        disableModalActions={setDisableModalActions}
-                        onError={setError}
-                        onSuccess={() => {
-                            handleCloseModal();
-                            refetch();
-                        }}
-                    />
-                )}
-                {currentProcess === "forgot-password" && (
-                    <ForgotPasswordForm  
-                        onChangeProcess={handleProcessChange} 
-                        disableModalActions={setDisableModalActions}
-                    />
-                )}
-            </div>
+            <Fade in={props.isOpen} timeout={300}>
+                <div className="bg-background/75 backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
+                    {currentProcess === "register" && (
+                        <RegisterForm<RegisterFormData, AuthProcessType>
+                            methods={registerMethod}
+                            error={error}
+                            onError={setError}
+                            setUserId={setUserId}
+                            onProcessChange={handleProcessChange}
+                            disableModalActions={setDisableModalActions}
+                        />
+                    )}
+                    {currentProcess === "login" && (
+                        <LoginForm<LoginFormData, AuthProcessType>
+                            methods={loginMethod}
+                            error={error}
+                            onError={setError}
+                            setUserId={setUserId}
+                            onProcessChange={handleProcessChange}
+                            disableModalActions={setDisableModalActions}
+                        />
+                    )}
+                    {currentProcess === "verify-code" && (
+                        <VerifyCodeForm<VerifyFormData, AuthProcessType>
+                            methods={verifyMethod}
+                            error={error}
+                            userId={userId ? userId : ""}
+                            onChangeProcess={handleProcessChange}
+                            disableModalActions={setDisableModalActions}
+                            onError={setError}
+                            onSuccess={() => {
+                                handleCloseModal();
+                                refetch();
+                            }}
+                        />
+                    )}
+                    {currentProcess === "forgot-password" && (
+                        <ForgotPasswordForm  
+                            onChangeProcess={handleProcessChange} 
+                            disableModalActions={setDisableModalActions}
+                        />
+                    )}
+                </div>
+            </Fade>
         </Modal>
     );
 };

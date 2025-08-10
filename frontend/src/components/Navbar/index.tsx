@@ -14,18 +14,6 @@ const Navbar = () => {
     const [toggle, setToggle] = useState<boolean>(false);
     const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (toggle || showSearchBar) {
-            document.body.classList.add("hide-sidebar-scroll");
-        } else {
-            document.body.classList.remove("hide-sidebar-scroll");
-        }
-
-        return () => {
-            document.body.classList.remove("hide-sidebar-scroll");
-        };
-    }, [toggle, showSearchBar]);
-
     const handleQuery = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 

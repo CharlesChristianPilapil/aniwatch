@@ -1,10 +1,12 @@
 import { Link, useParams } from "react-router-dom";
 import { useGetAnimeInfoQuery } from "../services/animeApiQuery";
-import AnimeCard from "../components/AnimeCard";
 import AnimeCardSkeleton from "../components/SkeletonLoader/AnimeCard.skeleton";
 import GenreCard from "../components/GenreCard";
 import RelatedAnimeCard from "../components/RelatedAnimeCard";
 import AnimeInfoHeroSection from "../components/HeroSection/AnimeInfoHeroSection";
+import { lazy, Suspense } from "react";
+
+const AnimeCard = lazy(() => import('../components/AnimeCard'));
 
 const AnimeInfoPage = () => {
     const { id } = useParams();
@@ -13,7 +15,6 @@ const AnimeInfoPage = () => {
     });
 
     const recommendations = data?.recommendations;
-
     const showLoaders = !data?.success || isLoading || isFetching;
 
     if ((!data?.success && !isLoading && !isFetching) || isError) {
@@ -34,6 +35,14 @@ const AnimeInfoPage = () => {
         );
     }
 
+    const AnimeCardLoader = () => {
+        return (
+            Array.from({ length: 18 }).map((_, index) => (
+                <AnimeCardSkeleton key={index} />
+            ))
+        )
+    }
+
     return (
         <>
             <AnimeInfoHeroSection />
@@ -43,13 +52,17 @@ const AnimeInfoPage = () => {
                         Recommended for you
                     </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                        {showLoaders
-                            ? Array.from({ length: 18 }).map((_, index) => (
-                                  <AnimeCardSkeleton key={index} />
-                              ))
-                            : recommendations?.map((data) => (
-                                  <AnimeCard key={data.id} {...data} />
-                              ))}
+                        {showLoaders ? (
+                            <AnimeCardLoader />
+                        ) : (
+                            <Suspense
+                                fallback={<AnimeCardLoader />}
+                            >       
+                                {recommendations?.map((data) => (
+                                    <AnimeCard key={data.id} {...data} />
+                                ))}
+                            </Suspense>
+                        )}
                     </div>
                 </div>
                 <div className="xl:w-[400px] lg:mt-10 space-y-10">

@@ -19,15 +19,7 @@ const GenreCard = () => {
             <div className="bg-main/25 p-2 rounded-sm w-full">
                 {(isLoading || error) && <GenreCardSkeleton />}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-1 lg:gap-y-0">
-                    {data?.genres
-                        ?.slice(
-                            0,
-                            !toggle
-                                ? width >= 1024
-                                    ? 21
-                                    : 20
-                                : data.genres.length
-                        )
+                    {data?.genres?.slice(0,!toggle ? width >= 1024 ? 21 : 20 : data.genres.length)
                         .map((genre) => (
                             <Link
                                 to={`/genre/${genre.replace(/\s+/g, "-")}`}
@@ -36,7 +28,8 @@ const GenreCard = () => {
                             >
                                 {genre}
                             </Link>
-                        ))}
+                        ))
+                    }
                 </div>
                 {!isLoading && !error && (
                     <button

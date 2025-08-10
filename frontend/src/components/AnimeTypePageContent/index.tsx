@@ -1,9 +1,11 @@
 import { Pagination } from "@mui/material";
 import type { AnimeCardType } from "../../utils/types/anime.type"
-import AnimeCard from "../AnimeCard";
 import { useSearchParams } from "react-router-dom";
 import useGetScreenSize from "../../hooks/useGetScreenSize";
 import AnimeCardSkeleton from "../SkeletonLoader/AnimeCard.skeleton";
+import { lazy, Suspense } from "react";
+
+const AnimeCard = lazy(() => import("../AnimeCard"));
 
 type AnimeTypePageContentType = {
     title?: string;
@@ -48,24 +50,36 @@ const AnimeTypePageContent = ({
         );
     };
 
+    const AnimeCardLoader = ({ length }: { length: number }) => {
+        return (
+            Array.from({ length }).map((_, id) => (
+                <AnimeCardSkeleton key={id} />
+            )
+        ));
+    };
+
+    const AnimeGridItems = ({ items, length }: { items: AnimeCardType[], length: number}) => {
+        if (isLoading || isFetching) {
+            return <AnimeCardLoader length={length} />
+        };
+
+        return (
+            <Suspense fallback={<AnimeCardLoader length={length} />}>
+                {items.map((anime) => (
+                    <AnimeCard key={anime.id} {...anime} />
+                ))}
+            </Suspense>
+        );
+    };
+
     return (
         <div className="w-full flex-1 space-y-4">
             <h2 className="sub-header"> {title} </h2>
             <div className="hidden lg:grid grid-cols-4 gap-4 mb-4">
-                {!isFetching && list.slice(0, 4).map((anime: AnimeCardType) => (
-                    <AnimeCard key={anime.id} {...anime} />
-                ))}
-                {(isLoading || isFetching) && Array.from({length: 4}).map((_, id) => (
-                    <AnimeCardSkeleton key={id} />
-                ))}
+                <AnimeGridItems items={list.slice(0, 4)} length={4} />
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                {!isFetching && list.slice(width >= 1024 ? 4 : 0).map((anime: AnimeCardType) => (
-                    <AnimeCard key={anime.id} {...anime} />
-                ))}
-                {(isLoading || isFetching) && Array.from({length: width >= 1024 ? 36 : 40}).map((_, id) => (
-                    <AnimeCardSkeleton key={id} />
-                ))}
+                <AnimeGridItems items={list.slice(width >= 1024 ? 4 : 0)} length={width >= 1024 ? 36 : 40} />
             </div>
             {(!isLoading && !isError) && (
                 <Pagination
@@ -81,6 +95,7 @@ const AnimeTypePageContent = ({
                 />
             )}
         </div>
-    )
-}
-export default AnimeTypePageContent
+    );
+};
+
+export default AnimeTypePageContent;
