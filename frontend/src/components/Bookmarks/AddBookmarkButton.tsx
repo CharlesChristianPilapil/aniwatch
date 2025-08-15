@@ -23,13 +23,15 @@ import AuthModal from "../Modal/AuthModal";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { cleanPayload } from "../../utils/helpers/cleanPayload";
 import toast from "react-hot-toast";
+import type { BookmarkStatus } from "../../utils/types/bookmark.type";
 
-import VisibilityIcon from "@mui/icons-material/Visibility"; // watching
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // completed
-import PauseCircleIcon from "@mui/icons-material/PauseCircle"; // on-hold
-import CancelIcon from "@mui/icons-material/Cancel"; // dropped
-import ScheduleIcon from "@mui/icons-material/Schedule"; // plan-to-watch
-import LiveTvIcon from "@mui/icons-material/LiveTv"; // ongoing
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import LiveTvIcon from "@mui/icons-material/LiveTv";
+import { bookmark_type } from "../../utils/constants/bookmarks";
 
 type AddToBookmarkType = {
     payload: {
@@ -40,14 +42,6 @@ type AddToBookmarkType = {
         anime_status?: string;
     };
 };
-
-type BookmarkStatus =
-    | "watching"
-    | "completed"
-    | "on-hold"
-    | "dropped"
-    | "plan-to-watch"
-    | "ongoing";
 
 const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
     const [open, setOpen] = useState<boolean>(false);
@@ -75,15 +69,6 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
         dropped: <CancelIcon />,
         "plan-to-watch": <ScheduleIcon />,
         ongoing: <LiveTvIcon />,
-    };
-
-    const bookmark_type: Record<BookmarkStatus, string> = {
-        watching: "Watching",
-        completed: "Completed",
-        "on-hold": "On-hold",
-        dropped: "Dropped",
-        "plan-to-watch": "To watch",
-        ongoing: "Ongoing",
     };
 
     const statusLabel =

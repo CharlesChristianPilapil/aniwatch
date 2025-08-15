@@ -21,8 +21,8 @@ const RelatedAnimeCard = ({ list, isLoading = false }: Props) => {
                     <AnimeItemSkeleton />
                 </li>
             ))
-        )
-    }
+        );
+    };
 
     return (
         <div className="w-full">
@@ -56,7 +56,7 @@ const RelatedAnimeCard = ({ list, isLoading = false }: Props) => {
                         list.length > 6 && (
                             <button
                                 onClick={() => setToggle(prevVal => !prevVal)} 
-                                className="w-full bg-primary-accent rounded-sm py-3 mt-2 cursor-pointer hover:opacity-80"
+                                className="w-full bg-primary-accent rounded-sm py-3 mt-2 cursor-pointer hover:opacity-80 focus:opacity-80 active:opacity-80"
                             > 
                                 {!toggle ? 'Show More' : 'Show Less'} 
                             </button>

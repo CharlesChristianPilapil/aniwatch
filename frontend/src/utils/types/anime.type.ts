@@ -11,6 +11,9 @@ export type AnimeCardType = {
     sub?: number;
     dub?: number;
     episodes?: number;
+    anime_id?: string;
+    anime_status?: string;
+    bookmark_status?: string;
 };
 
 export type AnimeListResponseType = {

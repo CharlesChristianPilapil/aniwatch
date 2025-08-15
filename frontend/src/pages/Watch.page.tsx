@@ -4,6 +4,7 @@ import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, 
 import { useEffect, useState } from "react";
 import RelatedAnimeCard from "../components/RelatedAnimeCard";
 import AnimeCard from "../components/AnimeCard";
+import AnimeCardSkeleton from "../components/SkeletonLoader/AnimeCard.skeleton";
 
 const WatchPage = () => {
     const { episodeId } = useParams();
@@ -153,7 +154,7 @@ const WatchPage = () => {
                                 title={`Episode ${episodeNumber}`}
                             />
                         </div>
-                        <div className="">
+                        <div>
                             <FormControl className="text-main mb-4 flex sm:flex-row sm:items-center gap-4">
                                 <FormLabel id="language-radio-group" className="text-main">Language:</FormLabel>
                                 <RadioGroup
@@ -258,7 +259,11 @@ const WatchPage = () => {
                                         <Link 
                                             key={genre} 
                                             to={`/genre/${genre.replace(/\s+/g, '-').toLowerCase()}`}
-                                            className="px-2 py-1 border border-main rounded-full text-xs hover:bg-background hover:text-secondary-accent"
+                                            className="px-2 py-1 border border-main rounded-full text-xs 
+                                                hover:bg-background hover:text-secondary-accent
+                                                focus:bg-background focus:text-secondary-accent
+                                                active:bg-background active:text-secondary-accent
+                                            "
                                         > 
                                             {genre} 
                                         </Link>
@@ -269,13 +274,19 @@ const WatchPage = () => {
                     )}
                 </div>
             </div>
-            <div className="flex flex-col xl:flex-row mt-10 gap-4">
+            <div className="flex flex-col xl:flex-row mt-10 gap-x-4 gap-y-10">
                 <div className="flex-1">
                     <h2 className="sub-header"> Recommended for you </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 rounded-sm">
-                        {AnimeInfoData?.recommendations.map((recommendation) => (
-                            <AnimeCard key={recommendation.id} {...recommendation} />
-                        ))}
+                        {!AnimeInfoData?.recommendations ? (
+                            Array.from({ length: 18 }).map((_, key) => (
+                                <AnimeCardSkeleton key={key} />
+                            ))
+                        ) : (
+                            AnimeInfoData?.recommendations.map((recommendation) => (
+                                <AnimeCard key={recommendation.id} {...recommendation} />
+                            ))
+                        )}
                     </div>
                 </div>
                 <div className="lg:w-[400px]">

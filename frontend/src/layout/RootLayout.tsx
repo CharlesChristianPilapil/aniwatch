@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useEffect } from "react";
 import Snackbar from "../components/Snackbar";
+import SuspenseLayout from "./SuspenseLayout";
 
 const RootLayout = () => {
     const location = useLocation();
@@ -15,7 +16,9 @@ const RootLayout = () => {
         <>
             <Snackbar toastOptions={{ removeDelay: 2000 }} />
             <Navbar />
-            <Outlet />
+            <SuspenseLayout>
+                <Outlet />
+            </SuspenseLayout>
             <Footer />
         </>
     );

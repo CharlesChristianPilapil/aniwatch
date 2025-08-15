@@ -24,7 +24,12 @@ const GenreCard = () => {
                             <Link
                                 to={`/genre/${genre.replace(/\s+/g, "-")}`}
                                 key={genre}
-                                className="h-fit hover:text-secondary-accent bg-background/75 hover:bg-background focus:bg-background focus:text-secondary-accent outline-none lg:bg-transparent p-3 text-sm rounded-sm"
+                                className="h-fit p-3 text-sm rounded-sm bg-background/75
+                                    hover:text-secondary-accent hover:bg-background 
+                                    focus:bg-background focus:text-secondary-accent 
+                                    active:bg-background active:text-secondary-accent
+                                    outline-none lg:bg-transparent
+                                "
                             >
                                 {genre}
                             </Link>
@@ -34,7 +39,11 @@ const GenreCard = () => {
                 {!isLoading && !error && (
                     <button
                         onClick={() => setToggle((prevVal) => !prevVal)}
-                        className="mt-2 w-full rounded-sm py-2 bg-background/50 cursor-pointer hover:text-primary-accent hover:bg-background/75 focus:text-primary-accent focus:bg-background/75"
+                        className="mt-2 w-full rounded-sm py-2 cursor-pointer bg-background/50 
+                            hover:text-primary-accent hover:bg-background/75 
+                            focus:text-primary-accent focus:bg-background/75
+                            active:text-primary-accent active:bg-background/75
+                        "
                     >
                         {!toggle ? "Show More" : "Show Less"}
                     </button>

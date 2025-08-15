@@ -7,6 +7,6 @@ export const api = createApi({
         baseUrl: baseUrl,
         credentials: "include",
     }),
-    tagTypes: ["isAnimeBookmarked"],
+    tagTypes: ["bookmarkList", "isAnimeBookmarked"],
     endpoints:() => ({}),
 });

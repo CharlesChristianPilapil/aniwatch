@@ -7,4 +7,5 @@ export type UserInfoType = {
     cover_image: string | null;
     city: string | null;
     website: string | null;
+    joined?: string | null;
 }

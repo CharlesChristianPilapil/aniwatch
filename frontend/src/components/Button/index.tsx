@@ -29,8 +29,7 @@ function isLinkButtonProps(props: ButtonProps): props is LinkProps {
 
 const Button = (props: ButtonProps) => {
     const { children } = props;
-    const commonStyle =
-        "bg-primary-accent p-3 rounded-sm cursor-pointer hover:bg-primary-accent/80 focus:bg-primary-accent/80 w-full";
+    const commonStyle = `p-3 rounded-sm cursor-pointer text-background ${props.className?.includes("w-fit") ? "w-fit" : "w-full"}`;
 
     if (isLinkButtonProps(props)) {
         const { children, className, disabled, ...anchorProps } = props;
@@ -38,9 +37,10 @@ const Button = (props: ButtonProps) => {
         return (
             <Link
                 to={props.href as string}
-                className={`${commonStyle} ${className} ${
-                    disabled ? "pointer-events-none opacity-50" : ""
-                }`}
+                className={`${commonStyle} ${className} 
+                    ${disabled ? "pointer-events-none opacity-50" : ""} block text-center
+                    bg-secondary-accent/80 hover:bg-secondary-accent focus:bg-secondary-accent active:bg-secondary-accent
+                `}
                 aria-disabled={disabled}
                 {...anchorProps}
             >
@@ -54,7 +54,9 @@ const Button = (props: ButtonProps) => {
     return (
         <button
             {...buttonProps}
-            className={`${commonStyle} ${btnClassName} disabled:opacity-50 disabled:pointer-events-none`}
+            className={`${commonStyle} ${btnClassName} disabled:opacity-50 
+                disabled:pointer-events-none bg-primary-accent/80 hover:bg-primary-accent focus:bg-primary-accent
+            `}
         >
             {children}
         </button>

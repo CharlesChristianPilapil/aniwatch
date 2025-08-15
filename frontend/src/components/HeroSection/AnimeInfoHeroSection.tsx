@@ -66,7 +66,7 @@ const AnimeInfoHeroSection = () => {
                                 </h2>
                                 <div className="grid grid-cols-2 gap-2 text-sm">
                                     <Link
-                                        to={`/watch/${data?.episodes[0]?.id}`} className="h-full bg-secondary-accent text-background hover:bg-secondary-accent/90 px-4 py-2 rounded-full flex gap-1 items-center"
+                                        to={`/watch/${data?.episodes[0]?.id}`} className="h-full bg-secondary-accent text-background hover:bg-secondary-accent/90 active:bg-secondary-accent/80 px-4 py-2 rounded-full flex gap-1 items-center"
                                     >
                                         <PlayArrowIcon />
                                         Watch Now
@@ -133,7 +133,12 @@ const AnimeInfoHeroSection = () => {
                                 {data?.genres?.map((genre) => (
                                     <Link
                                         key={genre}
-                                        to={`/genre/${genre.replace(/\s+/g, "-").toLowerCase()}`} className="px-2 py-1 border border-main rounded-full text-xs hover:bg-background hover:text-secondary-accent"
+                                        to={`/genre/${genre.replace(/\s+/g, "-").toLowerCase()}`} 
+                                        className="px-2 py-1 border border-main rounded-full text-xs 
+                                            hover:bg-background hover:text-secondary-accent 
+                                            focus:bg-background focus:text-secondary-accent 
+                                            active:bg-background active:text-secondary-accent
+                                        "
                                     >
                                         {genre}
                                     </Link>

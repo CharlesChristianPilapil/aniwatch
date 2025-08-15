@@ -1,4 +1,4 @@
-import type { BookmarkedItem } from "../utils/types/anime.type";
+import type { AnimeListResponseType, BookmarkedItem } from "../utils/types/anime.type";
 import { api } from "./baseApiService";
 
 type BookmarkCheckerType = {
@@ -18,13 +18,15 @@ export const bookmarkService = api.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
-            invalidatesTags: ["isAnimeBookmarked"]
+            invalidatesTags: ["isAnimeBookmarked", "bookmarkList"]
         }),
         getBookmarkList: builder.query<
-            unknown,
-            { page: number; status: string; sort: string; order: string }
+            AnimeListResponseType,
+            { username?: string, page?: number; status?: string; sort?: string; order?: string }
         >({
-            query: ({ page, status, sort, order }) => `/api/bookmarks/?page=${page}&status=${status}&sort=${sort}&order=${order}`,
+            query: ({ username = "", page = "", status = "", sort = "", order = "" }) => 
+                `/api/bookmarks/?username=${username}&status=${status}&sort=${sort}&order=${order}&page=${page}`,
+            providesTags: ["bookmarkList"],
         }),
         isBookmarked: builder.query<BookmarkCheckerType, { anime_id: string }>({
             query: ({ anime_id }) => `/api/bookmarks/${anime_id}`,

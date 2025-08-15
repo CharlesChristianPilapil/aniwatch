@@ -34,7 +34,7 @@ const AnimeGallery = ({
                 {(!isLoading || !isError) && (
                     <Link
                         to={navigationUrl}
-                        className="hover:text-secondary-accent hover:underline"
+                        className="hover:text-secondary-accent hover:underline focus:text-secondary-accent focus:underline active:text-secondary-accent active:underline"
                     >
                         View More
                     </Link>
@@ -97,16 +97,15 @@ function App() {
 
     return (
         <>
-            <header className="flex items-center min-h-[calc(100vh-68px)] md:min-h-[calc(100vh-80px)] py-10 bg-[url(/images/frieren-bg.webp)] bg-center bg-no-repeat mb-10 blurred-edge relative">
+            <header className="flex items-center min-height-screen py-10 bg-[url(/images/frieren-bg.webp)] bg-center bg-no-repeat mb-10 blurred-edge relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-black/50" />
                 <div className="container relative z-1">
                     <div className="max-w-[800px]">
                         <h2 className="text-2xl sm:text-4xl md:text-6xl lg:text-8xl font-semibold">
-                            {" "}
                             Welcome to{" "}
                             <span className="text-primary-accent">
-                                AniWatch{" "}
-                            </span>{" "}
+                                AniWatch
+                            </span>
                         </h2>
                         <div className="space-y-4">
                             <p>

@@ -61,7 +61,7 @@ const AnimeItemListCard = ({
                 {!isLoading && !isError && (
                     <Link
                         to={redirectUrlTo || "/"}
-                        className="flex items-center hover:text-secondary-accent focus:text-secondary-accent focus:underline outline-none w-fit"
+                        className="flex items-center hover:text-secondary-accent focus:text-secondary-accent active:text-secondary-accent focus:underline active:underline outline-none w-fit"
                     >
                         View More
                         <ArrowForwardIosIcon className="h-[16px]" />

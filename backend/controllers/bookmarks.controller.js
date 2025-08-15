@@ -1,20 +1,34 @@
 import sql from "../config/pg-db.js";
 
 export const getBookmarks = async (req, res, next) => {
-    const page = Math.max(+req.query.page || 1, 1);
-    const limit = 10;
-    const offset = (page - 1) * limit;
+    const { username } = req.query;
 
-    const { status, sort = "created_at", order = "desc" } = req.query;
+    let page = Math.max(+req.query.page || 1, 1);
+    const limit = 40;
 
-    const allowedSort = ["created_at", "updated_at", "title"];
+    const { status, sort = "created_at", order = "asc" } = req.query;
+    const allowedSort = ["created_at", "title", "type"];
     const allowedOrder = ["asc", "desc"];
 
     try {
-        let conditionSql = sql`WHERE user_id = ${req.user.id}`;
+        let conditionSql;
+        if (username) {
+            const [user] = await sql`
+                SELECT * FROM users
+                WHERE username = ${username};
+            `;
+            if (!user) {
+                const error = new Error("User does not exist");
+                error.status = 404;
+                return next(error);
+            }
+            conditionSql = sql`WHERE user_id = ${user.id}`;
+        } else {
+            conditionSql = sql`WHERE user_id = ${req.user.id}`
+        }
 
         if (status) {
-            conditionSql = sql`${conditionSql} AND status = ${status}`;
+            conditionSql = sql`${conditionSql} AND bookmark_status = ${status}`;
         }
 
         const [totalResults] = await sql`
@@ -26,11 +40,13 @@ export const getBookmarks = async (req, res, next) => {
         const totalPages = Math.ceil(totalCount / limit);
 
         const sortBy = allowedSort.includes(sort) ? sort : "created_at";
-        const orderSanitized = allowedOrder.includes(order.toLowerCase())
-            ? order.toUpperCase()
-            : "DESC";
+        const orderSanitized = allowedOrder.includes(order.toLowerCase()) ? order.toUpperCase() : "ASC";
         const sortOrderSql = orderSanitized === "ASC" ? sql`ASC` : sql`DESC`;
         const sortBySql = sql([sortBy]);
+
+        if (page > totalPages && totalPages > 0) page = totalPages;
+
+        const offset = (page - 1) * limit;
 
         const results = await sql`
             SELECT * FROM bookmarks
@@ -47,7 +63,7 @@ export const getBookmarks = async (req, res, next) => {
             results,
         });
     } catch (err) {
-        const error = new Error("Somethign went wrong.");
+        const error = new Error("Something went wrong.", err);
         console.error(err);
         return next(error);
     }
@@ -56,8 +72,7 @@ export const getBookmarks = async (req, res, next) => {
 export const addBookmark = async (req, res, next) => {
     const { id: user_id } = req.user;
 
-    const { anime_id, title, image, type, bookmark_status, anime_status } =
-        req.body;
+    const { anime_id, title, image, type, bookmark_status, anime_status } = req.body;
 
     if (!anime_id || !title || !bookmark_status) {
         const error = new Error("Missing required data.");

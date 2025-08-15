@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../services/authService";
 import { logout } from "../../slices/authSlice";
 import toast from "react-hot-toast";
-import { Divider, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Divider, ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { useState, type MouseEvent } from "react";
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import Settings from '@mui/icons-material/Settings';
@@ -54,18 +54,12 @@ const ProfileMenu = () => {
                 <h2 className="hidden md:block"> 
                     {userInfo?.username || "Guest"} 
                 </h2>
-                <Tooltip 
-                    title="Profile Settings" 
-                    placement="bottom-end"
-                    arrow
+                <button 
+                    onClick={handleClick} 
+                    className="cursor-pointer"
                 >
-                    <button 
-                        onClick={handleClick} 
-                        className="cursor-pointer"
-                    >
-                        <AccountCircleIcon className="text-main h-8 w-8 outline-2 outline-transparent hover:outline-main/25 transition-colors duration-200 rounded-full" />
-                    </button>
-                </Tooltip>
+                    <AccountCircleIcon className="text-main h-8 w-8 outline-2 outline-transparent hover:outline-main/25 transition-colors duration-200 rounded-full" />
+                </button>
                 <Menu
                     anchorEl={anchorEl}
                     id="account-menu"
@@ -106,7 +100,7 @@ const ProfileMenu = () => {
                     <MenuItem 
                         component={Link}
                         onClick={handleClose} 
-                        to={`/profile/${userInfo?.username.toLowerCase()}`}
+                        to={`/user/${userInfo?.username}`}
                     >
                         <ListItemIcon> <AccountCircleIcon fontSize="medium" /> </ListItemIcon>
                         Profile
@@ -115,7 +109,11 @@ const ProfileMenu = () => {
                         <ListItemIcon> <AccountCircleIcon fontSize="medium" /> </ListItemIcon>
                         My Account
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem 
+                        component={Link}
+                        onClick={handleClose}
+                        to={`/user/${userInfo?.username}/bookmarks`}
+                    >
                         <ListItemIcon>
                             <BookmarkOutlinedIcon  fontSize="medium"/>   
                         </ListItemIcon>

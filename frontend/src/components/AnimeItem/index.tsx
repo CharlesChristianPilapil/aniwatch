@@ -5,7 +5,7 @@ import type { AnimeItemType } from "../../utils/types/anime.type";
 
 const AnimeItem = ({ id, image, title, sub, dub, type }: AnimeItemType) => {
     return (
-        <div className="flex gap-2 border-b border-b-main/25 py-4">
+        <div className="group flex gap-2 border-b border-b-main/25 py-4">
             <div className="relative aspect-[2/3] max-w-[60px]">
                 <img
                     src={image}
@@ -17,7 +17,7 @@ const AnimeItem = ({ id, image, title, sub, dub, type }: AnimeItemType) => {
                 <h3 className="line-clamp-2">
                     <Link
                         to={`/info/${id}`}
-                        className="hover:text-secondary-accent focus:text-secondary-accent focus:underline w-full outline-none"
+                        className="hover:text-secondary-accent focus:text-secondary-accent active:text-secondary-accent focus:underline w-full outline-none"
                     >
                         {title}
                     </Link>

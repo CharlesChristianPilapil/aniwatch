@@ -5,7 +5,7 @@ import { addBookmark, getBookmarks, isBookmarked, updateBookmark } from "../cont
 const router = express.Router();
 
 router.route("/")
-    .get(verifyToken, getBookmarks)
+    .get(getBookmarks)
     .post(verifyToken, addBookmark);
 
 router.route("/:id")

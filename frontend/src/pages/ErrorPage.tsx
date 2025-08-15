@@ -12,7 +12,7 @@ const ErrorPage = () => {
             <p>Oh. Nothing here. Guess I’ll go home...</p>
             <Link
                 to="/"
-                className="px-4 py-2 bg-primary text-main rounded hover:text-secondary-accent underline outline-secondary-accent"
+                className="bg-primary text-main rounded hover:text-secondary-accent focus:text-secondary-accent active:text-secondary-accent underline outline-secondary-accent"
             >
                 Back to homepage
             </Link>

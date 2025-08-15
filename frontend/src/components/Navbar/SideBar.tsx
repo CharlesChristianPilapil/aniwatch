@@ -66,7 +66,7 @@ const SideBar = ({ isToggled = false, onToggle }: SideBarType) => {
             <div className="w-[250px] py-8 overflow-y-scroll scroll-hide bg-transparent">
                 <button
                     onClick={() => onToggle(false)}
-                    className="cursor-pointer mx-5 mb-5 hover:text-primary-accent focus:text-primary-accent focus:underline focus:outline-none"
+                    className="cursor-pointer mx-5 mb-5 hover:text-primary-accent focus:text-primary-accent active:text-primary-accent focus:underline active:underline focus:outline-none"
                 >
                     Close Menu
                 </button>
@@ -75,7 +75,7 @@ const SideBar = ({ isToggled = false, onToggle }: SideBarType) => {
                         <li key={index} className="w-full">
                             <Link
                                 to={link.url}
-                                className="px-5 py-5 border-b border-main/25 w-full block hover:text-secondary-accent hover:bg-background/50 focus:text-secondary-accent focus:bg-background/50 outline-none"
+                                className="px-5 py-5 border-b border-main/25 w-full block hover:text-secondary-accent hover:bg-background/50 focus:text-secondary-accent focus:bg-background/50 active:text-secondary-accent active:bg-background/50 outline-none"
                                 onClick={() => onToggle(false)}
                             >
                                 {link.label}
@@ -104,7 +104,7 @@ const SideBar = ({ isToggled = false, onToggle }: SideBarType) => {
                                             "-"
                                         )}`}
                                         onClick={() => onToggle(false)}
-                                        className="text-sm pl-4 py-2 hover:bg-background/75 hover:text-secondary-accent focus:bg-background/75 focus:text-secondary-accent outline-none rounded-sm"
+                                        className="text-sm pl-4 py-2 hover:bg-background/50 hover:text-secondary-accent focus:bg-background/50 focus:text-secondary-accent active:bg-background/50 active:text-secondary-accent outline-none rounded-sm"
                                     >
                                         {genre}
                                     </Link>
@@ -115,7 +115,7 @@ const SideBar = ({ isToggled = false, onToggle }: SideBarType) => {
                                 onClick={() =>
                                     setShowGenre((prevVal) => !prevVal)
                                 }
-                                className="w-full rounded bg-background/50 hover:text-primary-accent hover:bg-background/75 focus:bg-background/50 focus:text-primary-accent outline-primary-accent py-2 cursor-pointer"
+                                className="w-full rounded bg-background/50 hover:text-primary-accent hover:bg-background/75 focus:bg-background/50 focus:text-primary-accent active:bg-background/50 active:text-primary-accent outline-primary-accent py-2 cursor-pointer"
                             >
                                 {!showGenre ? "Show More" : "Show Less"}
                             </button>

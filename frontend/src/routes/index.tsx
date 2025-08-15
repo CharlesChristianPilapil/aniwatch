@@ -1,43 +1,61 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
 import RootLayout from "../layout/RootLayout";
-import TopAiringPage from "../pages/TopAiring.page";
-import MostPopularPage from "../pages/MostPopular.page";
-import RecentlyAddedPage from "../pages/RecentlyAdded.page";
-import TvSeriesPage from "../pages/TvSeries.page";
-import ONAsPage from "../pages/ONA.page";
-import OVAsPage from "../pages/OVA.page";
-import SpecialsPage from "../pages/Specials.page";
-import MoviesPage from "../pages/Movies.page";
-import AnimeInfoPage from "../pages/AnimeInfo.page";
-import ErrorPage from "../pages/ErrorPage";
-import RecentEpisodesPage from "../pages/RecentEpisodes.page";
-import WatchPage from "../pages/Watch.page";
-import GenreListPage from "../pages/GenreList.page";
-import SearchAnimePage from "../pages/SearchAnime.page";
-import AuthTest from "../pages/AuthTest";
+import ProtectedLayout from "../layout/ProtectedLayout";
+import UserLayout from "../layout/UserLayout";
+
+const HomeLazy = lazy(() => import("../App")); 
+const TopAiringLazy = lazy(() => import("../pages/TopAiring.page")); 
+const MostPopularLazy = lazy(() => import("../pages/MostPopular.page"));
+const RecentlyAddedLazy = lazy(() => import("../pages/RecentlyAdded.page"));
+const RecentEpisodesLazy = lazy(() => import("../pages/RecentEpisodes.page"));
+const TvSeriesLazy = lazy(() => import("../pages/TvSeries.page"));
+const OnaLazy = lazy(() => import("../pages/ONA.page"));
+const OvaLazy = lazy(() => import("../pages/OVA.page"));
+const SpecialsLazy = lazy(() => import("../pages/Specials.page"));
+const MoviesLazy = lazy(() => import("../pages/Movies.page"));
+const AnimeInfoLazt = lazy(() => import("../pages/AnimeInfo.page"));
+const WatchEpisodeLazy = lazy(() => import("../pages/Watch.page"));
+const GenreLazy = lazy(() => import("../pages/GenreList.page"));
+const QueryLazy = lazy(() => import("../pages/SearchAnime.page"));
+const ErrorLazy = lazy(() => import("../pages/ErrorPage"));
+const ProfileLazy = lazy(() => import("../pages/Profile.page"));
+
+// Protected
+const BookmarksLazy = lazy(() => import("../pages/Bookmarks.page"))
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <RootLayout />,
         children: [
-            { index: true, element: <App /> },
-            { path: "/top-airing", element: <TopAiringPage /> },
-            { path: "/most-popular", element: <MostPopularPage /> },
-            { path: "/recently-added", element: <RecentlyAddedPage /> },
-            { path: "/recent-episodes", element: <RecentEpisodesPage /> },
-            { path: "/tv", element: <TvSeriesPage /> },
-            { path: "/ona", element: <ONAsPage /> },
-            { path: "/ova", element: <OVAsPage /> },
-            { path: "/specials", element: <SpecialsPage /> },
-            { path: "/movies", element: <MoviesPage /> },
-            { path: "/info/:id", element: <AnimeInfoPage /> },
-            { path: "/watch/:episodeId", element: <WatchPage /> },
-            { path: "/genre/:genre", element: <GenreListPage /> },
-            { path: "/search/:query", element: <SearchAnimePage /> },
-            { path: "/auth", element: <AuthTest /> },
-            { path: "*", element: <ErrorPage /> },
+            { index: true, element: <HomeLazy /> },
+            { path: "/top-airing", element: <TopAiringLazy /> },
+            { path: "/most-popular", element: <MostPopularLazy /> },
+            { path: "/recently-added", element: <RecentlyAddedLazy /> },
+            { path: "/recent-episodes", element: <RecentEpisodesLazy /> },
+            { path: "/tv", element: <TvSeriesLazy /> },
+            { path: "/ona", element: <OnaLazy /> },
+            { path: "/ova", element: <OvaLazy /> },
+            { path: "/specials", element: <SpecialsLazy /> },
+            { path: "/movies", element: <MoviesLazy /> },
+            { path: "/info/:id", element: <AnimeInfoLazt /> },
+            { path: "/watch/:episodeId", element: <WatchEpisodeLazy /> },
+            { path: "/genre/:genre", element: <GenreLazy /> },
+            { path: "/search/:query", element: <QueryLazy /> },
+            { path: "*", element: <ErrorLazy /> },
+            { 
+                path: "/user/", 
+                element: <UserLayout />, 
+                children: [
+                    { path: ":username", element: <ProfileLazy /> },
+                    { path: ":username/bookmarks", element: <BookmarksLazy /> }
+                ] 
+            },
+            {
+                element: <ProtectedLayout />,
+                children: []
+            }
         ],
     },
 ]);

@@ -9,8 +9,8 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-black/10 py-10 mt-10">
-            <div className="container grid lg:grid-cols-[1fr_3fr] gap-y-10">
+        <footer className="py-20 mt-10">
+            <div className="container grid lg:grid-cols-[1fr_4fr] xl:grid-cols-[1fr_3fr] gap-y-10 lg:border-t lg:border-secondary-accent/25 lg:pt-5">
                 <Link
                     to="/"
                     className="hover:text-secondary-accent focus:text-secondary-accent focus:underline outline-none w-fit h-fit"
@@ -30,7 +30,7 @@ const Footer = () => {
                         <div className="flex flex-col gap-1">
                             <Link
                                 to={`mailto:${contact.email}`}
-                                className="w-fit hover:text-secondary-accent focus:text-secondary-accent focus:underline outline-none"
+                                className="w-fit hover:text-secondary-accent focus:text-secondary-accent focus:underline outline-none line-clamp-1 block"
                             >
                                 {contact.email}
                             </Link>

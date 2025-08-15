@@ -28,8 +28,8 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use("/api/user", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/anime", animeRoutes);
 app.use("/api/bookmarks", bookmarkRoutes);
 
