@@ -9,7 +9,7 @@ type LockoutState = {
 const initialState: LockoutState = {
     key: "",
     timeLeft: 0,
-    cooldownInSeconds: 90,
+    cooldownInSeconds: 0,
 }
 
 const lockoutSlice = createSlice({
@@ -42,8 +42,20 @@ const lockoutSlice = createSlice({
             localStorage.setItem(state.key, Date.now().toString());
             state.timeLeft = state.cooldownInSeconds;
         },
+        rehydrateLockout: (state, action: PayloadAction<{ key: string }>) => {
+            const stored = localStorage.getItem(action.payload.key);
+            if (stored) {
+                const cooldown = state.cooldownInSeconds || 90; // default if needed
+                const diff = Math.floor((Date.now() - +stored) / 1000);
+                state.timeLeft = Math.max(cooldown - diff, 0);
+                state.key = action.payload.key;
+            } else {
+                state.timeLeft = 0;
+                state.key = "";
+            }
+        },
     },
 });
 
-export const { startLockout, tick, resetLockout } = lockoutSlice.actions;
+export const { startLockout, tick, resetLockout, rehydrateLockout } = lockoutSlice.actions;
 export default lockoutSlice.reducer;

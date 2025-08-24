@@ -29,10 +29,7 @@ const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
     disableModalActions,
     setMfaType,
 }: LoginFormType<T, P>) => {
-    const { timeLeft, reset } = useTimerLockout({
-        key: "aniwatch_login_lockout",
-        minimum: 0,
-    });
+    const { timeLeft, reset, isLocked } = useTimerLockout({ key: "aniwatch_login_lockout" });
 
     const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
 
@@ -74,7 +71,7 @@ const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
             <form onSubmit={handleSubmit(handleLogin)}>
                 <div className="flex flex-col space-y-4 md:space-y-5 items-center w-full">
                     <h2 className="sub-header">Login</h2>
-                    {timeLeft > 0 && (
+                    {isLocked && (
                         <div className="w-full">
                             <p className="text-sm text-center bg-red-500 text-main w-full p-4 rounded-sm">
                                 Too many attempts.
@@ -84,7 +81,7 @@ const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
                             </p>
                         </div>
                     )}
-                    {error && !timeLeft && (
+                    {error && !isLocked && (
                         <p className="text-sm text-center bg-red-500 text-main w-full p-4 rounded-sm">
                             {error}
                         </p>
@@ -105,16 +102,16 @@ const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
                     />
                     <Button
                         type="submit"
-                        disabled={isLoginLoading || !timeLeft !== true}
+                        disabled={isLoginLoading || isLocked}
                     >
                         Login
                     </Button>
                 </div>
                 <button
-                    disabled={isLoginLoading}
+                    disabled={isLoginLoading || isLocked}
                     type="button"
                     onClick={() => onProcessChange("forgot-password" as P)}
-                    className="w-fit text-end mt-2 text-primary-accent cursor-pointer hover:underline focus:underline disabled:pointer-events-none"
+                    className="w-fit text-end mt-2 text-primary-accent cursor-pointer hover:underline focus:underline disabled:pointer-events-none disabled:opacity-50"
                 >
                     Forgot Password
                 </button>
@@ -122,9 +119,9 @@ const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
             <div className="text-center text-sm">
                 <p className="inline-block">{`Don't have an account?`} </p>{" "}
                 <button
-                    disabled={isLoginLoading}
+                    disabled={isLoginLoading || isLocked}
                     onClick={() => onProcessChange("register" as P)}
-                    className="text-primary-accent cursor-pointer hover:underline focus:underline disabled:pointer-events-none"
+                    className="text-primary-accent cursor-pointer hover:underline focus:underline disabled:pointer-events-none disabled:opacity-50"
                 >
                     Register
                 </button>

@@ -34,11 +34,7 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
     disableModalActions,
     mfaType,
 }: VerifyFormType<T, P>) => {
-    const { reset, timeLeft } = useTimerLockout({
-        key: "aniwatch_otp_lockout",
-        minimum: 3,
-    });
-
+    const { reset, timeLeft, isLocked } = useTimerLockout({ key: "aniwatch_otp_lockout", initialValue: 3 });
     const dispatch = useDispatch();
 
     const {
@@ -103,14 +99,14 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
                         {...register("code" as Path<T>)}
                     />
                     <div className="flex justify-between text-sm w-full">
-                        {timeLeft !== 0 && (
+                        {isLocked && (
                             <p>Time Remaining: {formatTime(timeLeft)}</p>
                         )}
                         <button
                             onClick={handleResend}
-                            disabled={timeLeft !== 0 || isLoading}
+                            disabled={isLocked || isLoading}
                             type="button"
-                            className="ml-auto cursor-pointer hover:text-primary-accent focus:text-primary-accent disabled:pointer-events-none disabled:opacity-50 hover:underline focus:underline outline-none"
+                            className="ml-auto cursor-pointer hover:text-primary-accent focus:text-primary-accent disabled:pointer-events-none hover:underline focus:underline outline-none disabled:opacity-50"
                         >
                             Resend
                         </button>

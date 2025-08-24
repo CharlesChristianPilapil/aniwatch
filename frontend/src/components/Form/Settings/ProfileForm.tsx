@@ -165,7 +165,7 @@ const EmailForm = ({ info }: { info?: UserInfoType }) => {
         resolver: zodResolver(UpdateEmailSchema)
     });
 
-    const { timeLeft, isLocked } = useTimerLockout({ key: `${MFA_TYPE.UPDATE_EMAIL}_lockout`});
+    const { timeLeft, isLocked } = useTimerLockout({ key: `${MFA_TYPE.UPDATE_EMAIL}_lockout` });
 
     const [mutation, mutationMethod] = useUpdateEmailMutation();
 

@@ -10,6 +10,7 @@ import formatTime from "../../utils/helpers/formatTime";
 import { useResendUpdateVerificationMutation, useVerifyUpdateMutation } from "../../services/userServices";
 import toast from "react-hot-toast";
 import type { CatchErrorType } from "../../utils/types/error.type";
+import { useEffect } from "react";
 
 type Props = {
     isOpen: boolean;
@@ -38,7 +39,21 @@ const UpdateProfileModal = ({
     new_value,
     onSuccess
 }: Props) => {
-    const { timeLeft, reset: resetTimer } = useTimerLockout({ key: `${type}_lockout` });
+    const { 
+        timeLeft, 
+        reset: resetTimer, 
+        isLocked,
+        resetInitialCountdown 
+    } = useTimerLockout({ key: `${type}_lockout`, initialValue: 3 });
+
+    useEffect(() => {
+        if (!isOpen) return;
+        resetInitialCountdown();
+    }, [isOpen, resetInitialCountdown])
+
+    const { 
+        reset: resetFieldTimer, 
+    } = useTimerLockout({ key: `${type}_lockout` });
 
     const { 
         register, 
@@ -53,6 +68,7 @@ const UpdateProfileModal = ({
             type: type
         }
     });
+
 
     const [resendMutation, resendMutationMethods] = useResendUpdateVerificationMutation();
     const [verifyMuration, verifyMutationMethods] = useVerifyUpdateMutation();
@@ -71,6 +87,7 @@ const UpdateProfileModal = ({
             const res = await resendMutation({ type: type, field_name, new_value }).unwrap();
             if (res.success) {
                 toast.success("Verification code sent", { id: toastId });
+                resetFieldTimer();
                 resetTimer();
             }
         } catch (error) {
@@ -124,12 +141,12 @@ const UpdateProfileModal = ({
                                 error={errors.code?.message}
                             />
                             <div className="flex justify-between text-sm w-full">
-                                {timeLeft !== 0 && (
+                                {isLocked && (
                                     <p>Time Remaining: {formatTime(timeLeft)}</p>
                                 )}
                                 <button
                                     onClick={handleResend}
-                                    disabled={timeLeft !== 0 || loading}
+                                    disabled={isLocked || loading}
                                     type="button"
                                     className="ml-auto cursor-pointer hover:text-primary-accent focus:text-primary-accent disabled:pointer-events-none disabled:opacity-50 hover:underline focus:underline outline-none"
                                 >
