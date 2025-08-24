@@ -4,8 +4,8 @@ export type UserInfoType = {
     email: string;
     name: string;
     avatar_image: string | null;
-    cover_image: string | null;
+    phone_number: string | null;
     city: string | null;
-    website: string | null;
+    bio: string | null;
     joined?: string | null;
 }

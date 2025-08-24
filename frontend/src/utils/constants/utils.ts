@@ -1,7 +1,11 @@
-export const VERIFICATION_TYPE = {
-    EMAIL_CODE: 'EMAIL_CODE',
-    TOTP: 'TOTP',
-}
+export const BREAKPOINTS = {
+    XS: 640,
+    SM: 640,
+    MD: 768,
+    LG: 1024,
+    XL: 1280,
+    "2XL": 1536,
+};
 
 export const MFA_TYPE = {
     LOGIN: 'login_mfa',
@@ -9,6 +13,6 @@ export const MFA_TYPE = {
     UPDATE_EMAIL: 'update_email_mfa',
     RESET_PASSWORD: 'reset_password_mfa',
     CHANGE_PASSWORD: 'change_password_mfa',
-}
+} as const;
 
-export const ANIME_API = process.env.ANIME_API;
+export type MFAType = typeof MFA_TYPE[keyof typeof MFA_TYPE];

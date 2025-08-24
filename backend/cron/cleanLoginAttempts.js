@@ -9,9 +9,7 @@ cron.schedule("0 * * * *", async () => {
             RETURNING *;
         `;
 
-        console.log(
-            `Login attempt records cleanup ran. Deleted ${deleted.length} expired entries.`
-        );
+        console.log(`Login attempt records cleanup ran. Deleted ${deleted.length} expired entries.`);
     } catch (error) {
         console.error("Failed to clean up login attempt records:", error);
     }

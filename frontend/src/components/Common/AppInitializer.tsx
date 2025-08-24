@@ -13,7 +13,6 @@ const AppInitializer = () => {
                 const res = await getMe().unwrap();
                     if (res.success) {
                     dispatch(setCredentials(res.info));
-                    console.log("Logged In!");
                 } else {
                     dispatch(setCredentials(null));
                 }

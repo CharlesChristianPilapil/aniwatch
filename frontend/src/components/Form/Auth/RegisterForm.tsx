@@ -1,11 +1,12 @@
 import type { Path, useForm } from "react-hook-form";
-import type { RegisterFormData } from "../../utils/schema/auth.schema";
-import InputField from "../InputField";
-import Button from "../Button";
-import { useRegisterMutation } from "../../services/authService";
-import type { CatchErrorType } from "../../utils/types/error.type";
+import type { RegisterFormData } from "../../../utils/schema/auth.schema";
+import InputField from "../../InputField";
+import Button from "../../Button";
+import { useRegisterMutation } from "../../../services/authService";
+import type { CatchErrorType } from "../../../utils/types/error.type";
 import toast from "react-hot-toast";
-import type { AuthProcessType } from "../../utils/types/auth.type";
+import type { AuthProcessType } from "../../../utils/types/auth.type";
+import type { MFAType } from "../../../utils/constants/utils";
 
 type RegisterFormType<T extends RegisterFormData, P extends AuthProcessType> = {
     methods: ReturnType<typeof useForm<T>>;
@@ -14,6 +15,7 @@ type RegisterFormType<T extends RegisterFormData, P extends AuthProcessType> = {
     onError: (e: string | undefined) => void;
     disableModalActions: (e: boolean) => void;
     setUserId: (e: string | undefined) => void;
+    setMfaType: (e: MFAType | "") => void;
 };
 
 const RegisterForm = <T extends RegisterFormData, P extends AuthProcessType>({
@@ -23,6 +25,7 @@ const RegisterForm = <T extends RegisterFormData, P extends AuthProcessType>({
     onError,
     disableModalActions,
     setUserId,
+    setMfaType,
 }: RegisterFormType<T, P>) => {
     const {
         register,
@@ -49,6 +52,7 @@ const RegisterForm = <T extends RegisterFormData, P extends AuthProcessType>({
                     id: toastId,
                 });
                 setUserId(res?.user_id);
+                setMfaType("register_mfa");
             }
         } catch (error: unknown) {
             toast.dismiss();

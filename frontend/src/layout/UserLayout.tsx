@@ -16,7 +16,7 @@ const UserLayout = () => {
     return (
         <div className="relative">
             <div
-                style={{ backgroundImage: `url(${data.info.cover_image || "/images/dimple.webp"})`}}
+                style={{ backgroundImage: `url(${data.info.avatar_image || "/images/dimple.webp"})`}}
                 className="
                     bg-black bg-no-repeat bg-center bg-cover absolute top-0 left-0 w-full aspect-video -z-1 max-h-screen
                     after:top-0 after:left-0 after:absolute after:block after:w-full after:h-full after:content-[''] cover-pattern

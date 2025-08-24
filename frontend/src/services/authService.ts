@@ -35,11 +35,11 @@ export const authService = api.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
-            invalidatesTags: ["isAnimeBookmarked"],
+            invalidatesTags: ["isAnimeBookmarked", "session"],
         }),
         resendVerification: builder.mutation<
             { success: boolean; message: string },
-            { user_id: number }
+            { user_id: number, type: string }
         >({
             query: (data) => ({
                 url: "/auth/resend",
@@ -52,7 +52,7 @@ export const authService = api.injectEndpoints({
                 url: "/auth/logout",
                 method: "POST",
             }),
-            invalidatesTags: ["isAnimeBookmarked"],
+            invalidatesTags: ["isAnimeBookmarked", "session"],
         }),
         changePasswordRequest: builder.mutation<
             LoginResponseType,

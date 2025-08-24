@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../store";
+import { resetLockout, startLockout, tick } from "../slices/lockoutSlice";
 
 type TimerLockoutType = {
     key: string;
@@ -9,41 +12,34 @@ type TimerLockoutType = {
 const useTimerLockout = ({
     key,
     cooldownInSeconds = 90,
-    minimum = 0,
 }: TimerLockoutType) => {
-    const [timeLeft, setTimeLeft] = useState<number>(() => {
-        const last = localStorage.getItem(key);
-        if (last) {
-            const diff = Math.floor((Date.now() - +last) / 1000);
-            return Math.max(cooldownInSeconds - diff, minimum);
-        }
 
-        return minimum;
-    });
+    const dispatch = useDispatch();
+    const { timeLeft } = useSelector((state: RootState) => state.lockout);
+
+    useEffect(() => {
+        dispatch(startLockout({ key, cooldownInSeconds }));
+    }, [dispatch, key, cooldownInSeconds])
 
     useEffect(() => {
         if (timeLeft <= 0) return;
 
         const interval = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev <= 1) {
-                    clearInterval(interval);
-                    return 0;
-                }
-                return prev - 1;
-            });
+            dispatch(tick());
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [timeLeft]);
+    }, [dispatch, timeLeft]);
 
     const reset = () => {
-        const now = Date.now();
-        localStorage.setItem(key, now.toString());
-        setTimeLeft(cooldownInSeconds);
+        dispatch(resetLockout());
     };
 
-    return { timeLeft, reset };
+    return {
+        timeLeft,
+        isLocked: timeLeft > 0,
+        reset,
+    };
 };
 
 export default useTimerLockout;

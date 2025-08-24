@@ -21,9 +21,9 @@ const ProfilePage = () => {
                 <div className="flex-1 space-y-10">
                     <div className="flex flex-col items-center sm:flex-row gap-4">
                         <img
-                            src={user?.avatar_image ?? "/images/dimple.webp"}
+                            src={user?.avatar_image ?? "/images/avatar.jpg"}
                             alt={`${username} avatar.`}
-                            className="rounded-full ring-2 ring-primary-accent/75 p-1 aspect-square max-w-20 max-h-20"
+                            className="rounded-full ring-2 ring-primary-accent/75 p-1 aspect-square max-w-20 max-h-20 object-cover"
                         />
                         <div className="flex flex-col items-center gap-1 justify-between text-sm sm:items-start">
                             <h2> {user?.name} </h2>

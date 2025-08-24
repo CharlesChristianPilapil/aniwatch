@@ -1,15 +1,15 @@
 import { useState } from "react";
-import InputField from "../InputField";
-import Button from "../Button";
-import type { AuthProcessType } from "../../utils/types/auth.type";
+import InputField from "../../InputField";
+import Button from "../../Button";
+import type { AuthProcessType } from "../../../utils/types/auth.type";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useChangePasswordRequestMutation, useResendResetRequestMutation, useResetPasswordMutation, useVerifyResetRequestMutation } from "../../services/authService";
+import { useChangePasswordRequestMutation, useResendResetRequestMutation, useResetPasswordMutation, useVerifyResetRequestMutation } from "../../../services/authService";
 import toast from "react-hot-toast";
-import type { CatchErrorType } from "../../utils/types/error.type";
-import useTimerLockout from "../../hooks/useTimerLockout";
-import formatTime from "../../utils/helpers/formatTime";
+import type { CatchErrorType } from "../../../utils/types/error.type";
+import useTimerLockout from "../../../hooks/useTimerLockout";
+import formatTime from "../../../utils/helpers/formatTime";
 
 type ForgotPasswordFormType = {
     onChangeProcess: (e: AuthProcessType) => void;
@@ -53,7 +53,7 @@ type resetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 const ForgotPasswordForm = ({
     onChangeProcess,
-    disableModalActions
+    disableModalActions,
 }: ForgotPasswordFormType) => {
 
     const { timeLeft, reset: resetLockout } = useTimerLockout({ key: "aniwatch_reset_password_request" });
@@ -272,7 +272,7 @@ const ForgotPasswordForm = ({
                 <button 
                     disabled={isLoading}
                     onClick={() => onChangeProcess("login")}
-                    className=" cursor-pointer hover:underline focus:underline hover:text-primary-accent focus:text-primary-accent outline-none disabled:pointer-events-none"
+                    className="text-primary-accent cursor-pointer hover:underline focus:underline hover:text-primary-accent focus:text-primary-accent outline-none disabled:pointer-events-none disabled:opacity-50"
                 >
                     Login
                 </button> 

@@ -5,6 +5,7 @@ const errorHandler = (err, req, res, next) => {
     res.status(status).json({
         success: false,
         message,
+        errors: err.errors || null,
     });
 };
 

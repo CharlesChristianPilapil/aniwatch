@@ -58,7 +58,15 @@ const ProfileMenu = () => {
                     onClick={handleClick} 
                     className="cursor-pointer"
                 >
-                    <AccountCircleIcon className="text-main h-8 w-8 outline-2 outline-transparent hover:outline-main/25 transition-colors duration-200 rounded-full" />
+                    {userInfo?.avatar_image ? (
+                        <img 
+                            src={userInfo.avatar_image} 
+                            alt={`${userInfo.username} avatar`}
+                            className="w-10 h-10 rounded-full p-1 outline-2 outline-transparent hover:outline-main/25 transition-colors duration-200 object-cover" 
+                        />
+                    ) : (
+                        <AccountCircleIcon className="text-main h-8 w-8 outline-2 outline-transparent hover:outline-main/25 transition-colors duration-200 rounded-full" />
+                    )}
                 </button>
                 <Menu
                     anchorEl={anchorEl}
@@ -105,10 +113,6 @@ const ProfileMenu = () => {
                         <ListItemIcon> <AccountCircleIcon fontSize="medium" /> </ListItemIcon>
                         Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon> <AccountCircleIcon fontSize="medium" /> </ListItemIcon>
-                        My Account
-                    </MenuItem>
                     <MenuItem 
                         component={Link}
                         onClick={handleClose}
@@ -120,7 +124,11 @@ const ProfileMenu = () => {
                         Bookmarked Animes
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem 
+                        component={Link}
+                        onClick={handleClose}
+                        to={`/settings`}
+                    >
                         <ListItemIcon> <Settings fontSize="medium" /> </ListItemIcon>
                         Settings
                     </MenuItem>

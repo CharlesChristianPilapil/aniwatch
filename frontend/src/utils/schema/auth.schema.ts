@@ -28,17 +28,15 @@ export const registerSchema = z
             .string()
             .nonempty("Username is required.")
             .min(5, "Username must be atleast 5 characters.")
-            .max(15, "Username must not exceed 15 characters."),
+            .max(15, "Username must not exceed 15 characters.")
+            .regex(/^[a-zA-Z0-9_]+$/, "Only letters, numbers, and underscores are allowed."),
         email: z.email().nonempty("Email is required."),
         password: z
             .string()
             .nonempty("Password is required.")
             .min(8, "Password must be atleast 8 characters.")
             .max(15, "Password must not exceed 15 characters.")
-            .regex(
-                /[A-Z]/,
-                "Password must contain at least one uppercase letter."
-            )
+            .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
             .regex(/[0-9]/, "Password must contain at least one number."),
         repeat_password: z.string().nonempty("Please confirm your password."),
     })

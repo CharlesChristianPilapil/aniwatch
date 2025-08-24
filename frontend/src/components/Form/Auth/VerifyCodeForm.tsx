@@ -1,17 +1,17 @@
-import Button from "../Button";
-import InputField from "../InputField";
-import formatTime from "../../utils/helpers/formatTime";
-import useTimerLockout from "../../hooks/useTimerLockout";
+import Button from "../../Button";
+import InputField from "../../InputField";
+import formatTime from "../../../utils/helpers/formatTime";
+import useTimerLockout from "../../../hooks/useTimerLockout";
 import {
     useResendVerificationMutation,
     useVerifyMutation,
-} from "../../services/authService";
-import type { CatchErrorType } from "../../utils/types/error.type";
+} from "../../../services/authService";
+import type { CatchErrorType } from "../../../utils/types/error.type";
 import toast from "react-hot-toast";
 import type { Path, useForm } from "react-hook-form";
-import type { VerifyFormData } from "../../utils/schema/auth.schema";
+import type { VerifyFormData } from "../../../utils/schema/auth.schema";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../slices/authSlice";
+import { setCredentials } from "../../../slices/authSlice";
 
 type VerifyFormType<T extends VerifyFormData, P> = {
     methods: ReturnType<typeof useForm<T>>;
@@ -21,6 +21,7 @@ type VerifyFormType<T extends VerifyFormData, P> = {
     onSuccess: () => void;
     onChangeProcess: (e: P) => void;
     disableModalActions?: (e: boolean) => void;
+    mfaType: string;
 };
 
 const VerifyCodeForm = <T extends VerifyFormData, P>({
@@ -31,6 +32,7 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
     onError,
     onChangeProcess,
     disableModalActions,
+    mfaType,
 }: VerifyFormType<T, P>) => {
     const { reset, timeLeft } = useTimerLockout({
         key: "aniwatch_otp_lockout",
@@ -50,12 +52,13 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
 
     const handleResend = async () => {
         disableModalActions?.(true);
+        const toastId = toast.loading("Sending new code verification.");
         try {
-            await resendVerification({ user_id: +userId }).unwrap();
-            toast.success("Verification code sent to your email.");
+            await resendVerification({ user_id: +userId, type: mfaType }).unwrap();
+            toast.success("Verification code sent to your email.", { id: toastId });
             reset();
         } catch (error: unknown) {
-            toast.error("Failed to send verification code. Please try again.");
+            toast.error("Failed to send verification code. Please try again.", { id: toastId });
             const typesError = error as CatchErrorType;
             onError(typesError.data?.message);
         } finally {
@@ -88,7 +91,7 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
         <div className="space-y-5 md:space-y-10 p-10">
             <form onSubmit={handleSubmit(handleVerify)} className="space-y-4">
                 <h2 className="sub-header text-center"> Verify </h2>
-                {error && !timeLeft && (
+                {error && (
                     <p className="text-sm text-center bg-red-500 text-main w-full p-4 rounded-sm">
                         {error}
                     </p>
@@ -120,7 +123,7 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
                 <button
                     disabled={isLoading}
                     onClick={() => onChangeProcess("login" as P)}
-                    className="hover:underline focus:underline hover:text-primary-accent focus:text-primary-accent cursor-pointer disabled:pointer-events-none"
+                    className="text-primary-accent hover:underline focus:underline hover:text-primary-accent focus:text-primary-accent cursor-pointer disabled:pointer-events-none disabled:opacity-50"
                 >
                     Login
                 </button>

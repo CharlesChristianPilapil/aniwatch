@@ -20,7 +20,13 @@ const AnimeCard = (props: AnimeCardType) => {
                 />
                 <Link
                     to={`/info/${navigateTo}`}
-                    className="absolute top-0 left-0 w-full h-full bg-background/25 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover/cover-wrapper:opacity-100 group-focus/cover-wrapper:focus:opacity-100 focus:opacity-100 group-active/cover-wrapper:active:opacity-100 transition-all duration-200 outline-none"
+                    className="
+                        absolute top-0 left-0 w-full h-full bg-background/25 backdrop-blur-sm flex items-center justify-center opacity-0 
+                        group-hover/cover-wrapper:opacity-100 
+                        group-focus/cover-wrapper:focus:opacity-100 focus:opacity-100 
+                        group-active/cover-wrapper:active:opacity-100 
+                        transition-all duration-200 outline-none z-1
+                    "
                 >
                     <PlayArrowIcon className="h-20 w-20 text-main" />
                 </Link>

@@ -1,14 +1,20 @@
-import bcrypt, { hash, truncates } from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { sendOTP } from "../utils/sendEmail.js";
-import sql from "../config/pg-db.js";
-import handleFailedAttempt from "../utils/helpers/handleFailedAttempt.js";
-import parseAsUTC from "../utils/helpers/parseAsUtc.js";
-import generateOtp from "../utils/helpers/generateOtp.js";
+import { sendOTP } from "../../utils/sendEmail.js";
+import sql from "../../config/pg-db.js";
+import handleFailedAttempt from "../../utils/helpers/handleFailedAttempt.js";
+import parseAsUTC from "../../utils/helpers/parseAsUtc.js";
+import generateOtp from "../../utils/helpers/generateOtp.js";
+import { MFA_TYPE } from "../../utils/constants.js";
 
 const LOCK_DURATION = (1 * 60 + 30) * 1000;
+const ACCESS_TOKEN_DURATION = 15 * 60 * 1000;
+const REFRESH_TOKEN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
+// @desc    Login user
+// @route   POST /auth/login
+// @access  Public
 export const login = async (req, res, next) => {
     const { identifier, password } = req.body;
 
@@ -84,8 +90,8 @@ export const login = async (req, res, next) => {
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
         await sql`
-            INSERT INTO email_code_mfa (user_id, code, expires_at)
-            VALUES (${user.id}, ${otp}, ${expiresAt});
+            INSERT INTO user_code_mfa (user_id, code, type, expires_at)
+            VALUES (${user.id}, ${otp}, ${MFA_TYPE.LOGIN}, ${expiresAt});
         `;
 
         await sendOTP(user.email, otp);
@@ -101,6 +107,10 @@ export const login = async (req, res, next) => {
     }
 };
 
+
+// @desc    Register user
+// @route   POST /auth/register
+// @access  Public
 export const register = async (req, res, next) => {
     const { name, username, email, password } = req.body;
 
@@ -143,8 +153,8 @@ export const register = async (req, res, next) => {
         const userId = result.id;
 
         await sql`
-            INSERT INTO email_code_mfa (user_id, code, expires_at)
-            VALUES (${userId}, ${otp}, ${expiresAt});
+            INSERT INTO user_code_mfa (user_id, code, type, expires_at)
+            VALUES (${userId}, ${otp}, ${MFA_TYPE.REGISTER}, ${expiresAt});
         `;
 
         await sendOTP(email, otp);
@@ -161,6 +171,9 @@ export const register = async (req, res, next) => {
     }
 };
 
+// @desc    Verify OTP Code
+// @route   POST /auth/verify
+// @access  Public
 export const verify = async (req, res, next) => {
     const { code, user_id } = req.body;
 
@@ -186,15 +199,32 @@ export const verify = async (req, res, next) => {
             `;
         }
 
-        const token = jwt.sign({ id: user.id }, "secretkey");
+        const accessToken = jwt.sign(
+            { id: user.id }, 
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "15m" }
+        );
+
+        const refreshToken = jwt.sign(
+            { id: user.id },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: "7d" }
+        );
+
         const { password: pass, is_verified, ...safeUser } = user;
 
         return res
-            .cookie("accessToken", token, {
+            .cookie("accessToken", accessToken, {
                 httpOnly: true,
                 secure: IS_PRODUCTION,
                 sameSite: IS_PRODUCTION ? "None" : "Lax",
-                maxAge: 24 * 60 * 60 * 1000,
+                maxAge: ACCESS_TOKEN_DURATION,
+            })
+            .cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: IS_PRODUCTION,
+                sameSite: IS_PRODUCTION ? "None" : "Lax",
+                maxAge: REFRESH_TOKEN_DURATION,
             })
             .status(200)
             .json({
@@ -206,8 +236,12 @@ export const verify = async (req, res, next) => {
 
     try {
         const [record] = await sql`
-            SELECT * FROM email_code_mfa
-            WHERE code = ${code} AND user_id = ${user_id} AND is_used = false;
+            SELECT * FROM user_code_mfa
+            WHERE 
+                code = ${code} 
+                AND user_id = ${user_id}
+                AND type IN (${MFA_TYPE.REGISTER}, ${MFA_TYPE.LOGIN}) 
+                AND is_used = false;
         `;
 
         if (!record) {
@@ -226,24 +260,29 @@ export const verify = async (req, res, next) => {
         }
 
         await sql`
-            UPDATE email_code_mfa
+            UPDATE user_code_mfa
             SET is_used = true
-            WHERE id = ${record.id};
+            WHERE id = ${record.id}
         `;
 
         return signInHandler(record);
     } catch (err) {
+        console.error(err);
         const error = new Error(`OTP verification failed. ${err}`);
         return next(error);
     }
 };
 
+
+// @desc    Resend OTP Code
+// @route   POST /auth/resend
+// @access  Public
 export const resendVerification = async (req, res, next) => {
-    const { user_id } = req.body;
+    const { user_id, type } = req.body;
 
     try {
         await sql`
-            DELETE FROM email_code_mfa
+            DELETE FROM user_code_mfa
             WHERE user_id = ${user_id}
         `;
 
@@ -256,8 +295,8 @@ export const resendVerification = async (req, res, next) => {
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
         await sql`
-            INSERT INTO email_code_mfa (user_id, code, expires_at)
-            VALUES (${user_id}, ${otp}, ${expiresAt});
+            INSERT INTO user_code_mfa (user_id, code, type, expires_at)
+            VALUES (${user_id}, ${otp}, ${type}, ${expiresAt});
         `;
 
         await sendOTP(user.email, otp);
@@ -272,10 +311,19 @@ export const resendVerification = async (req, res, next) => {
     }
 };
 
-export const logout = (req, res, next) => {
+// @desc    Logout user
+// @route   POST /auth/logout
+// @access  Private
+export const logout = (_req, res, next) => {
     try {
         return res
             .clearCookie("accessToken", {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+            })
+            .clearCookie("refreshToken", {
+                httpOnly: true,
                 secure: true,
                 sameSite: "none",
             })
@@ -286,175 +334,3 @@ export const logout = (req, res, next) => {
         return next(error);
     }
 };
-
-export const session = (req, res, next) => {
-    try {
-        return res.status(200).json({
-            is_authenticated: true,
-            user: req.user,
-        });
-    } catch (err) {
-        const error = new Error("Something went wrong.");
-        return next(error);
-    }
-};
-
-export const resetPasswordRequest = async (req, res, next) => {
-    const { email } = req.body;
-
-    try {
-        if (!email) {
-            const error = new Error("Email is required.");
-            error.status = 400;
-            return next(error);
-        }
-
-        const [user] = await sql`
-            SELECT * FROM users
-            WHERE email = ${email};
-        `;
-
-        if (!user) {
-            const error = new Error("User doesn't exist.");
-            error.status = 404;
-            return next(error)
-        }
-
-        const otp = generateOtp();
-        const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
-        await sql`
-            INSERT INTO reset_password_codes (user_id, code, expires_at)
-            VALUES (${user.id}, ${otp}, ${expiresAt});
-        `;
-
-        await sendOTP(user.email, otp, "reset-password-otp");
-
-        return res.status(200).json({
-            success: true,
-            message: "OTP has been resent to your email.",
-            user_id: user.id
-        });
-    } catch (err) {
-        const error = new Error("Something went wrong.");
-        return next(error)
-    }
-}
-
-export const verifyPasswordReset = async (req, res, next) => {
-    const { code, user_id } = req.body;
-    
-    try {
-        const [request] = await sql`
-            SELECT * FROM reset_password_codes
-            WHERE code = ${code} AND user_id = ${user_id};
-        `;
-
-        if (!request) {
-            const error = new Error("Invalid request code.");
-            error.status = 400;
-            return next(error);
-        }
-
-        const expiresAt = new Date(request.expires_at);
-        const now = new Date();
-
-        if (now >= expiresAt || request.is_expired) {
-            const error = new Error("Code expired. Request a new one.");
-            error.status = 400;
-            return next(error);
-        }
-
-        await sql`
-            UPDATE reset_password_codes 
-            SET is_expired = true
-            WHERE code = ${code} AND user_id = ${user_id};
-        `;
-
-        return res.status(200).json({
-            success: true,
-            message: "Verification successful. You may now reset your password.",
-            user_id: user_id
-        });
-    } catch (err) {
-        const error = new Error("Something went wrong.");
-        return next(error)
-    }
-}
-
-export const resendResetRequestCode = async (req, res, next) => {
-    const { user_id } = req.body;
-    
-    try {
-        await sql`
-            DELETE FROM reset_password_codes
-            WHERE user_id = ${user_id};
-        `;
-
-        const [user] = await sql`
-            SELECT * FROM users
-            WHERE id = ${user_id};
-        `;
-
-        if (!user) {
-            const error = new Error(`User with ID of ${user_id} not found.`);
-            error.status = 404;
-            return next(error);
-        }
-
-        const otp = generateOtp();
-        const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
-        await sql`
-            INSERT INTO reset_password_codes (user_id, code, expires_at)
-            VALUES (${user_id}, ${otp}, ${expiresAt});
-        `;
-
-        await sendOTP(user.email, otp, "reset-password-otp");
-
-        return res.status(200).json({
-            success: true,
-            message: "A new request code has been sent to your email.",
-            user_id: user.id
-        });
-    } catch (err) {
-        const error = new Error("Failed to resend request code.");
-        next(error);
-    }
-}
-
-export const resetPassword = async (req, res, next) => {
-    const { user_id, password } = req.body;
-
-    if (!user_id || !password) {
-        const error = new Error("User ID and password are required.");
-        error.status = 400;
-        return next(error);
-    }
-
-    try {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const [result] = await sql`
-            UPDATE users
-            SET password = ${hashedPassword}
-            WHERE id = ${user_id}
-            RETURNING id;
-        `;
-
-        if (!result) {
-            const error = new Error("User not found or password not updated.");
-            error.status = 404;
-            return next(error);
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "Password successfully reset.",
-        });
-    } catch (err) {
-        const error = new Error("Something went wrong while resetting password.");
-        return next(error);
-    }
-}

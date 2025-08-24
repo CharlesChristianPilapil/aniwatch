@@ -2,7 +2,10 @@ import { Fade, Modal } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LoginForm from "../Form/LoginForm";
+import LoginForm from "../Form/Auth/LoginForm";
+import RegisterForm from "../Form/Auth/RegisterForm";
+import ForgotPasswordForm from "../Form/Auth/ForgotPasswordForm";
+import VerifyCodeForm from "../Form/Auth/VerifyCodeForm";
 import {
     type LoginFormData,
     loginSchema,
@@ -11,22 +14,20 @@ import {
     type VerifyFormData,
     verifySchema,
 } from "../../utils/schema/auth.schema";
-import RegisterForm from "../Form/RegisterForm";
-import ForgotPasswordForm from "../Form/ForgotPasswordForm";
-import VerifyCodeForm from "../Form/VerifyCodeForm";
 import type { AuthProcessType } from "../../utils/types/auth.type";
+import { type MFAType } from "../../utils/constants/utils";
 
 type AuthModalType = {
     isOpen: boolean;
     onClose: () => void;
 };
 
-
 const AuthModal = (props: AuthModalType) => {
     const [disableModalActions, setDisableModalActions] = useState<boolean>(false);
     const [currentProcess, setCurrentProcess] = useState<AuthProcessType>("login");
     const [error, setError] = useState<string | undefined>("");
     const [userId, setUserId] = useState<string | undefined>("");
+    const [mfaType, setMfaType] = useState<MFAType | "">("");
 
     const registerMethod = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -44,6 +45,7 @@ const AuthModal = (props: AuthModalType) => {
 
     const handleReset = () => {
         setError("");
+        setMfaType("");
         registerMethod.reset();
         loginMethod.reset();
         verifyMethod.reset();
@@ -77,6 +79,7 @@ const AuthModal = (props: AuthModalType) => {
                             error={error}
                             onError={setError}
                             setUserId={setUserId}
+                            setMfaType={setMfaType}
                             onProcessChange={handleProcessChange}
                             disableModalActions={setDisableModalActions}
                         />
@@ -87,6 +90,7 @@ const AuthModal = (props: AuthModalType) => {
                             error={error}
                             onError={setError}
                             setUserId={setUserId}
+                            setMfaType={setMfaType}
                             onProcessChange={handleProcessChange}
                             disableModalActions={setDisableModalActions}
                         />
@@ -96,6 +100,7 @@ const AuthModal = (props: AuthModalType) => {
                             methods={verifyMethod}
                             error={error}
                             userId={userId ? userId : ""}
+                            mfaType={mfaType}
                             onChangeProcess={handleProcessChange}
                             disableModalActions={setDisableModalActions}
                             onError={setError}
@@ -103,7 +108,7 @@ const AuthModal = (props: AuthModalType) => {
                         />
                     )}
                     {currentProcess === "forgot-password" && (
-                        <ForgotPasswordForm  
+                        <ForgotPasswordForm
                             onChangeProcess={handleProcessChange} 
                             disableModalActions={setDisableModalActions}
                         />
