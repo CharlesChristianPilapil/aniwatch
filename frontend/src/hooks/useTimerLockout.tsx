@@ -39,7 +39,7 @@ const useTimerLockout = ({
     };
 
     const [initialTime, setInitialTime] = useState<number | undefined>(initialValue);
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     
     const resetInitialCountdown = useCallback(() => {
         setInitialTime(initialValue);
