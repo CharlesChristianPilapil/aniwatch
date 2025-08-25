@@ -13,6 +13,7 @@ import AnimeCard from "./components/AnimeCard";
 import GenreCard from "./components/GenreCard";
 import AnimeCardSkeleton from "./components/SkeletonLoader/AnimeCard.skeleton";
 import AnimeItemListCard from "./components/AnimeItem/AnimeItemListCard";
+import PageTitle from "./components/PageTitle";
 
 const AnimeGallery = ({
     title,
@@ -97,6 +98,7 @@ function App() {
 
     return (
         <>
+            <PageTitle title="Home" />
             <header className="flex items-center min-height-screen py-10 bg-[url(/images/frieren-bg.webp)] bg-center bg-no-repeat mb-10 blurred-edge relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-black/50" />
                 <div className="container relative z-1">
@@ -104,7 +106,7 @@ function App() {
                         <h2 className="text-2xl sm:text-4xl md:text-6xl lg:text-8xl font-semibold">
                             Welcome to{" "}
                             <span className="text-primary-accent">
-                                AniWatch
+                                AniStream
                             </span>
                         </h2>
                         <div className="space-y-4">

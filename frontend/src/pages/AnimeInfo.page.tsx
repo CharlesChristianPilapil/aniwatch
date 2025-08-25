@@ -5,6 +5,7 @@ import GenreCard from "../components/GenreCard";
 import RelatedAnimeCard from "../components/RelatedAnimeCard";
 import AnimeInfoHeroSection from "../components/HeroSection/AnimeInfoHeroSection";
 import { lazy, Suspense } from "react";
+import PageTitle from "../components/PageTitle";
 
 const AnimeCard = lazy(() => import('../components/AnimeCard'));
 
@@ -47,6 +48,7 @@ const AnimeInfoPage = () => {
 
     return (
         <>
+            <PageTitle title={isLoading || isFetching ? "loading" : data?.title} />
             <AnimeInfoHeroSection />
             <main className="flex flex-col lg:flex-row gap-x-4 gap-y-10 container">
                 <div className="flex-1 py-10">

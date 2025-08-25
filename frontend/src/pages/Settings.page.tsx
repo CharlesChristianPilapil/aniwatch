@@ -8,6 +8,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ProfileForm from "../components/Form/Settings/ProfileForm";
 import SecurityForm from "../components/Form/Settings/SecurityForm";
+import PageTitle from "../components/PageTitle";
 
 type TabsType = "profile" | "security" | "notifications" | "privacy";
 
@@ -67,59 +68,62 @@ const SettingsPage = () => {
     };
 
     return (
-        <main className="container max-w-[1280px] space-y-10 pt-10">
-            <h2 className="font-semibold"> My Account </h2>
-            <div className="lg:flex space-y-4 lg:gap-4 lg:space-y-0">
-                <Tabs
-                    orientation={width >= BREAKPOINTS.LG ? "vertical" : "horizontal"}
-                    value={activeTab}
-                    onChange={handleChangeTabs}
-                    variant={width < 560 ? "scrollable" : "standard"}
-                    centered={width >= 560}
-                    scrollButtons
-                    allowScrollButtonsMobile
-                    className="lg:border-r lg:border-r-main/25 lg:bg-main/15 lg:h-fit rounded lg:w-[188px]"
-                    slotProps={{
-                        indicator: {
-                            className: "bg-primary-accent"
-                        }
-                    }}
-                    sx={{
-                        "& .MuiTab-root": {
-                            minHeight: width >= BREAKPOINTS.LG ? 72 : 48,
-                            alignItems: "center",
-                            fontSize: 12
-                        },
-                    }}
-                >
-                    {TabItems.map((tab) => (
-                        <Tab 
-                            key={tab.value}
-                            label={tab.label}
-                            icon={tab.icon}
-                            iconPosition="start"
-                            {...a11yProps(tab.value)}
-                        />
-                    ))}
-                </Tabs>
-                <TabPanel value={activeTab} panelId="profile">
-                    <ProfileForm />
-                </TabPanel>
-                <TabPanel value={activeTab} panelId="security">
-                    <SecurityForm />
-                </TabPanel>
-                <TabPanel value={activeTab} panelId="notifications">
-                    <div className="text-center py-10">
-                        <p> Not yet available </p>
-                    </div>
-                </TabPanel>
-                <TabPanel value={activeTab} panelId="privacy">
-                    <div className="text-center py-10">
-                        <p> Not yet available </p>
-                    </div>
-                </TabPanel>
-            </div>
-        </main>
+        <>
+            <PageTitle title="Settings" />
+            <main className="container max-w-[1280px] space-y-10 pt-10">
+                <h2 className="font-semibold"> My Account </h2>
+                <div className="lg:flex space-y-4 lg:gap-4 lg:space-y-0">
+                    <Tabs
+                        orientation={width >= BREAKPOINTS.LG ? "vertical" : "horizontal"}
+                        value={activeTab}
+                        onChange={handleChangeTabs}
+                        variant={width < 560 ? "scrollable" : "standard"}
+                        centered={width >= 560}
+                        scrollButtons
+                        allowScrollButtonsMobile
+                        className="lg:border-r lg:border-r-main/25 lg:bg-main/15 lg:h-fit rounded lg:w-[188px]"
+                        slotProps={{
+                            indicator: {
+                                className: "bg-primary-accent"
+                            }
+                        }}
+                        sx={{
+                            "& .MuiTab-root": {
+                                minHeight: width >= BREAKPOINTS.LG ? 72 : 48,
+                                alignItems: "center",
+                                fontSize: 12
+                            },
+                        }}
+                    >
+                        {TabItems.map((tab) => (
+                            <Tab 
+                                key={tab.value}
+                                label={tab.label}
+                                icon={tab.icon}
+                                iconPosition="start"
+                                {...a11yProps(tab.value)}
+                            />
+                        ))}
+                    </Tabs>
+                    <TabPanel value={activeTab} panelId="profile">
+                        <ProfileForm />
+                    </TabPanel>
+                    <TabPanel value={activeTab} panelId="security">
+                        <SecurityForm />
+                    </TabPanel>
+                    <TabPanel value={activeTab} panelId="notifications">
+                        <div className="text-center py-10">
+                            <p> Not yet available </p>
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={activeTab} panelId="privacy">
+                        <div className="text-center py-10">
+                            <p> Not yet available </p>
+                        </div>
+                    </TabPanel>
+                </div>
+            </main>
+        </>
     );
 };
 
