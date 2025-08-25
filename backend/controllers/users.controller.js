@@ -3,6 +3,7 @@ import { MFA_TYPE } from "../utils/constants.js";
 import checkUser from "../utils/helpers/checkUser.js";
 import generateOtp from "../utils/helpers/generateOtp.js";
 import { sendOTP } from "../utils/sendEmail.js";
+import bcrypt from 'bcryptjs';
 // import { sanitizeObject } from "../utils/helpers/sanitizeObject.js";
 
 export const getCurrentUser = async (req, res, next) => {
@@ -339,6 +340,71 @@ export const updateEmail = async (req, res, next) => {
         return next(error);
     }
 }
+
+export const updatePassword = async (req, res, next) => {
+    const { old_password, new_password } = req.body;
+    const { id } = req.user;
+
+    let errors = {};
+
+    try {
+        if (!old_password || !new_password) {
+            const error = new Error("Fill out for correctly.");
+            error.status = 400;
+            return next(error); 
+        }
+
+        const user = await checkUser(id);
+
+        const salt = await bcrypt.genSalt(10);
+
+        const isOldPasswordCorrect = await bcrypt.compare(old_password, user.password);
+        const isNewPasswordSameAsOld = await bcrypt.compare(new_password, user.password);
+
+        const hashedNewPassword = await bcrypt.hash(new_password, salt);
+        
+        if (!isOldPasswordCorrect) {
+            errors.old_password = "Incorrect old password.";
+        }
+    
+        if (isNewPasswordSameAsOld) {
+            errors.new_password = "New password matches current one.";
+        }
+    
+        if (Object.keys(errors).length > 0) {
+            const error = new Error("Validation error.");
+            error.status = 400;
+            error.errors = errors;
+            return next(error);
+        }
+
+        const otp = generateOtp();
+        const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+        sendVerification({
+            user_id: user.id,
+            type: MFA_TYPE.CHANGE_PASSWORD,
+            code: otp,
+            expires_at: expiresAt,
+            field_name: "password",
+            new_value: hashedNewPassword,            
+        });
+
+        await sendOTP(user.email, otp, MFA_TYPE.CHANGE_PASSWORD);
+
+        const { password, ...safeUser } = user;
+
+        return res.status(200).json({
+            success: true,
+            message: "Request to change password sent.",
+            info: safeUser,
+        });
+    } catch (err) {
+        console.error(err)
+        const error = new Error("Failed to change password.");
+        return next(error);
+    };
+};
 
 const sendVerification = async ({
     type,

@@ -60,7 +60,7 @@ const UpdateProfileModal = ({
         handleSubmit, 
         reset, 
         formState: { errors, isDirty, },
-        setError 
+        setError,
     } = useForm<VerificationFormData>({
         resolver: zodResolver(VerificationSchema),
         defaultValues: {
@@ -102,8 +102,12 @@ const UpdateProfileModal = ({
         try {
             const res = await verifyMuration(data).unwrap();
             if (res.success) {
+                reset();
                 onSuccess();
-                toast.success("Email updated", { id: toastId });
+                toast.success(`
+                    ${field_name === 'email' ? 'Email' : 'Password'} updated successfully!`, 
+                    { id: toastId }
+                );
             }
         } catch (error) {
             const typesError = error as CatchErrorType<{ code: string }>;
@@ -116,7 +120,10 @@ const UpdateProfileModal = ({
                 return;
             }
 
-            toast.error("Failed to update email", { id: toastId });
+            toast.error(
+                `Failed to update ${field_name === 'email' ? 'email' : 'password'}. Please try again.`, 
+                { id: toastId }
+            );
         }
     }
 

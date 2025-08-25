@@ -1,4 +1,4 @@
-import { forwardRef, useState, type HTMLAttributes, type InputHTMLAttributes } from "react";
+import { forwardRef, useEffect, useState, type HTMLAttributes, type InputHTMLAttributes } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
@@ -10,10 +10,14 @@ type InputFieldProps = {
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     ({ label, error, ...props }, ref) => {
-        const [showPassword, setShowPassword] = useState<boolean>(false);
+        const [showPassword, setShowPassword] = useState<boolean>(true);
         const isPassword = props?.type === "password";
 
         const inputType = isPassword && showPassword ? "text" : props.type;
+
+        useEffect(() => {
+            if (props.readOnly) setShowPassword(false);
+        }, [props.readOnly])
 
         return (
             <div className={`flex flex-col space-y-1 ${props.wrapper?.className ? props.wrapper?.className : "w-full"}`}>
@@ -40,8 +44,9 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
                         />
                         <button
                             type="button"
+                            disabled={props.readOnly}
                             onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-background z-10 cursor-pointer"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-background z-10 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
                         >
                             {showPassword ? (
                                 <VisibilityIcon />

@@ -7,6 +7,7 @@ import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ProfileForm from "../components/Form/Settings/ProfileForm";
+import SecurityForm from "../components/Form/Settings/SecurityForm";
 
 type TabsType = "profile" | "security" | "notifications" | "privacy";
 
@@ -26,7 +27,7 @@ const TabItems: { value: TabsType, label: string, icon: ReactElement }[] = [
 const TabPanel = (props: TabPanelProps) => {
     const { children, value, panelId, ...other } = props;
 
-    return (
+    return value === panelId ? (
         <div
             role="tabpanel"
             hidden={value !== panelId}
@@ -38,8 +39,8 @@ const TabPanel = (props: TabPanelProps) => {
         >
             {children}
         </div>
-    )
-}
+    ) : null;
+};
 
 const SettingsPage = () => {
 
@@ -105,7 +106,7 @@ const SettingsPage = () => {
                     <ProfileForm />
                 </TabPanel>
                 <TabPanel value={activeTab} panelId="security">
-                    Security
+                    <SecurityForm />
                 </TabPanel>
                 <TabPanel value={activeTab} panelId="notifications">
                     <div className="text-center py-10">

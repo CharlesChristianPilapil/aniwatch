@@ -162,7 +162,10 @@ const EmailForm = ({ info }: { info?: UserInfoType }) => {
         setError,
         getValues
     } = useForm<UpdateEmailFormData>({
-        resolver: zodResolver(UpdateEmailSchema)
+        resolver: zodResolver(UpdateEmailSchema),
+        defaultValues: {
+            email: ""
+        }
     });
 
     const { timeLeft, isLocked } = useTimerLockout({ key: `${MFA_TYPE.UPDATE_EMAIL}_lockout` });

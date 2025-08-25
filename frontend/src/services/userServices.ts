@@ -63,6 +63,13 @@ const userService = api.injectEndpoints({
                 body: data,
             })
         }),
+        updatePassword: builder.mutation<{ info: UserInfoType, success: boolean }, { old_password: string, new_password: string }>({
+            query: (data) => ({
+                url: "/api/users/update/password",
+                method: "POST",
+                body: data,
+            })
+        }),
         verifyUpdate: builder.mutation<{ info: UserInfoType, success: boolean }, { type: string, code: string }>({
             query: (data) => ({
                 url: "/api/users/update/verify",
@@ -92,6 +99,7 @@ export const {
     useUpdateAvatarMutation,
     useRemoveAvatarMutation,
     useUpdateEmailMutation,
+    useUpdatePasswordMutation,
     useVerifyUpdateMutation,
     useResendUpdateVerificationMutation,
 } = userService
