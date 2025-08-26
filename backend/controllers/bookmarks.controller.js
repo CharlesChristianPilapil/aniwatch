@@ -71,7 +71,6 @@ export const getBookmarks = async (req, res, next) => {
 
 export const addBookmark = async (req, res, next) => {
     const { id: user_id } = req.user;
-
     const { anime_id, title, image, type, bookmark_status, anime_status } = req.body;
 
     if (!anime_id || !title || !bookmark_status) {
@@ -80,51 +79,54 @@ export const addBookmark = async (req, res, next) => {
     }
 
     try {
+        const [existingBookmark] = await sql`
+            SELECT * FROM bookmarks
+            WHERE user_id = ${user_id} AND anime_id = ${anime_id};
+        `;
+
+        if (existingBookmark) {
+            if (existingBookmark.bookmark_status === bookmark_status) {
+                const [data] = await sql`
+                    DELETE FROM bookmarks
+                    WHERE user_id = ${existingBookmark.user_id}
+                    AND anime_id = ${existingBookmark.anime_id}
+                    RETURNING *;
+                `;
+
+                return res.status(200).json({
+                    data,
+                    success: true,
+                    message: "Title removed from bookmarks."
+                });
+            }
+
+            const [data] = await sql`
+                UPDATE bookmarks
+                SET bookmark_status = ${bookmark_status}
+                WHERE user_id = ${user_id} AND anime_id = ${anime_id};
+            `;
+
+            return res.status(200).json({
+                data,
+                success: true,
+                message: "Title updated from bookmarks."
+            });
+        }
+
         const [data] = await sql`
             INSERT INTO bookmarks (user_id, title, anime_id, image, type, anime_status, bookmark_status)
-            VALUES (${user_id}, ${title}, ${anime_id}, ${image || ""}, 
-                ${type || ""}, ${anime_status || ""}, ${bookmark_status})
+            VALUES (${user_id}, ${title}, ${anime_id}, ${image || ""}, ${type || ""}, ${anime_status || ""}, ${bookmark_status})
             ON CONFLICT (user_id, anime_id) DO NOTHING;
         `;
 
-        return res.status(200).json({ success: true, data: data });
-    } catch (err) {
-        const error = new Error("Failed to add bookmark.");
-        console.error(err);
-        return next(error);
-    }
-};
-
-export const updateBookmark = async (req, res, next) => {
-    const { id: bookmark_id } = req.params;
-    const { status, anime_id } = req.body;
-    const { id: user_id } = req.user;
-
-    if (!status || !anime_id) {
-        const error = new Error("Missing status or anime ID.");
-        return next(error);
-    }
-
-    try {
-        if (!bookmark_id) {
-            const error = new Error("Missing bookmark ID.");
-            return next(error);
-        }
-
-        const [result] = await sql`
-            UPDATE bookmarks
-            SET status = ${status}, updated_at = NOW()
-            WHERE id = ${bookmark_id} AND user_id = ${user_id}
-            RETURNING *;
-        `;
-
-        return res.status(200).json({
-            success: true,
-            message: `Bookmark with ID of ${bookmark_id} updated.`,
-            data: result,
+        return res.status(200).json({ 
+            data, 
+            success: true, 
+            message: "Title added to bookmarks." 
         });
     } catch (err) {
-        const error = new Error("Failed to update.");
+        const error = new Error("Failed procces bookmark.");
+        console.error(err);
         return next(error);
     }
 };

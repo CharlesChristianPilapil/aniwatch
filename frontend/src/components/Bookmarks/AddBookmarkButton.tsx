@@ -90,10 +90,12 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
 
         const toastId = toast.loading("Adding to bookmark.");
         try {
-            await addBookmark(bookmarkPayload).unwrap();
-            toast.success("Title added to bookmarks.", { id: toastId });
-            refetchChecker();
-            setOpen(false);
+            const res = await addBookmark(bookmarkPayload).unwrap();
+            if (res.success) {
+                toast.success(`${res.message}`, { id: toastId });
+                refetchChecker();
+                setOpen(false);
+            }
         } catch (error: unknown) {
             const err = error as FetchBaseQueryError;
             if (err.status === 401) {
@@ -126,7 +128,6 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
         }
     };
 
-    // return focus to the button when we transitioned from !open -> open
     const prevOpen = useRef(open);
     useEffect(() => {
         if (prevOpen.current === true && open === false) {
