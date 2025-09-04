@@ -111,25 +111,14 @@ function App() {
                         </h2>
                         <div className="space-y-4">
                             <p>
-                                AniWatch is a personal project built to explore
-                                and learn modern web technologies, offering a
-                                seamless anime streaming experience — all for
-                                free.
+                                AniStream is a personal project exploring modern web technologies, delivering a smooth, free anime streaming experience.
                             </p>
                             <p>
-                                Continuously evolving with new features and
-                                performance improvements, AniWatch lets you dive
-                                into everything from timeless classics to the
-                                latest seasonal hits.
+                                Enjoy classics and seasonal hits while I keep improving features and performance.
                             </p>
                             <p>
-                                Discover, stream, and enjoy anime like never
-                                before.
-                                <span className="block mt-1">
-                                    (P.S. It's hosted on a free tier, so initial
-                                    loading might take a bit longer — I'm broke
-                                    😅.)
-                                </span>
+                                P.S. Hosted on a free tier <br/> 
+                                (Initial requests might be slow or fail if the server freezes. Sorry gang, I’m broke 😅)
                             </p>
                         </div>
                     </div>

@@ -24,6 +24,16 @@ export type AnimeListResponseType = {
     results: AnimeCardType[];
 };
 
+export type AnimeInfoEpisodeType = {
+    id: string;
+    number: number;
+    title: string;
+    isFiller: boolean;
+    isSubbed: boolean;
+    isDubbed: boolean;
+    url: string;
+};
+
 export type AnimeInfoType = {
     success: boolean;
     id: string;
@@ -53,15 +63,7 @@ export type AnimeInfoType = {
     status: string;
     season: string;
     totalEpisodes: number;
-    episodes: {
-        id: string;
-        number: number;
-        title: string;
-        isFiller: boolean;
-        isSubbed: boolean;
-        isDubbed: boolean;
-        url: string;
-    }[];
+    episodes: AnimeInfoEpisodeType[];
 };
 
 export type GenreListType = {

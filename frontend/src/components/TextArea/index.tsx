@@ -16,7 +16,7 @@ const TextArea = (props: Props) => {
             <textarea 
                 id={others.name}
                 {...others}
-                className="bg-main rounded resize-none h-[120px] w-full text-background outline-none p-2 read-only:text-background/50"
+                className={`${others.className ? others.className : "bg-main text-background read-only:text-background/50"} rounded resize-none h-[120px] w-full outline-none p-2`}
             />
             {error && <p className="text-red-400 text-sm"> {error} </p>}
         </div>

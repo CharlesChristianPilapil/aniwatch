@@ -34,7 +34,7 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
     disableModalActions,
     mfaType,
 }: VerifyFormType<T, P>) => {
-    const { reset, timeLeft, isLocked } = useTimerLockout({ key: "aniwatch_otp_lockout", initialValue: 3 });
+    const { reset, timeLeft, isLocked } = useTimerLockout({ key: "anistream_otp_lockout", initialValue: 3 });
     const dispatch = useDispatch();
 
     const {

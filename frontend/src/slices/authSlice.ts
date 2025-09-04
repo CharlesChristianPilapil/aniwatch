@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { UserInfoType } from "../utils/types/users.type";
 
-const user_info = "aniwatch_user_info";
+const user_info = "anistream_user_info";
 
 const userJson = localStorage.getItem(user_info);
 const initialState = {

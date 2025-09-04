@@ -6,6 +6,7 @@ import AnimeCard from "../components/AnimeCard";
 import AnimeCardSkeleton from "../components/SkeletonLoader/AnimeCard.skeleton";
 import { Pagination } from "@mui/material";
 import useGetScreenSize from "../hooks/useGetScreenSize";
+import PageTitle from "../components/PageTitle";
 
 const BookmarksPage = () => {
     const { width } = useGetScreenSize();
@@ -75,6 +76,7 @@ const BookmarksPage = () => {
 
     return (
         <>
+            <PageTitle title={`${username} | Bookmarks`} />
             <main className="container max-w-[1246px] flex flex-col lg:flex-row gap-x-5 gap-y-10 pt-10 pb-5">
                 <div className="space-y-10 w-full min-height-screen">
                     <Link to={`/user/${username}`} className="flex items-center gap-1 hover:text-secondary-accent focus:text-secondary-accent active:text-secondary-accent w-fit"> 

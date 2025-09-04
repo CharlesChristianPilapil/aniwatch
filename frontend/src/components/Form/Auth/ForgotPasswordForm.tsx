@@ -56,7 +56,7 @@ const ForgotPasswordForm = ({
     disableModalActions,
 }: ForgotPasswordFormType) => {
 
-    const { timeLeft, reset: resetLockout } = useTimerLockout({ key: "aniwatch_reset_password_request" });
+    const { timeLeft, reset: resetLockout } = useTimerLockout({ key: "anistream_reset_password_request" });
 
     const [step, setStep] = useState<"request" | "verify" | "reset">("request");
     const [userId, setUserId] = useState<number | null>(null);

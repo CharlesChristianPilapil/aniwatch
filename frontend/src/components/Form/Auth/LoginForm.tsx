@@ -29,7 +29,7 @@ const LoginForm = <T extends LoginFormData, P extends AuthProcessType>({
     disableModalActions,
     setMfaType,
 }: LoginFormType<T, P>) => {
-    const { timeLeft, reset, isLocked } = useTimerLockout({ key: "aniwatch_login_lockout" });
+    const { timeLeft, reset, isLocked } = useTimerLockout({ key: "anistream_login_lockout" });
 
     const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
 

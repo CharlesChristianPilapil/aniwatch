@@ -87,7 +87,7 @@ const Navbar = () => {
                         </button>
                             <Link to={"/"}>
                                 <h1 className="font-bold text-xl lg:text-2xl hover:text-secondary-accent focus:text-secondary-accent active:text-secondary-accent">
-                                    AniWatch
+                                    AniStream
                                 </h1>
                             </Link>
                         </div>
