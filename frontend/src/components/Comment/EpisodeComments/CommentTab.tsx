@@ -24,7 +24,7 @@ const CommentTab = (props: CommentType) => {
                 <img 
                     src={avatar_image || "/images/avatar.jpg"}
                     alt={`${username || ""} avatar image.`} 
-                    className='h-10 w-10 object-cover rounded-full'
+                    className='h-8 w-8 sm:w-10 sm:h-10 object-cover rounded-full'
                 />
             </Link>
             <div className='space-y-1 flex-1'>
@@ -39,7 +39,7 @@ const CommentTab = (props: CommentType) => {
                     </p>
                 </div>
                 <p className='text-main/75'> {content} </p>
-                <div className="flex gap-4 text-sm">  
+                <div className="flex gap-4 text-xs sm:text-sm">  
                     <div className="flex items-center">
                         <ReplyIcon className="text-sm" />
                         <p> Reply </p>
@@ -53,7 +53,7 @@ const CommentTab = (props: CommentType) => {
                         0
                     </div>
                     <div className="flex items-center">
-                        <MoreHorizIcon className="text" />
+                        <MoreHorizIcon className="text-sm" />
                         More
                     </div>
                 </div>

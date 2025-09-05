@@ -72,10 +72,10 @@ const PostEpisodeComment = () => {
                 <img 
                     src={userInfo?.avatar_image || "/images/avatar.jpg"}
                     alt={`${userInfo?.username || ""} avatar image.`} 
-                    className='h-10 w-10 object-cover rounded-full'
+                    className='h-8 w-8 sm:w-10 sm:h-10 object-cover rounded-full'
                 />
             </Link> 
-            <div className='w-full space-y-4'>
+            <div className='w-full space-y-4 flex-1'>
                 {userInfo ? (
                     <h3 className='font-semibold'>
                         <Link to={`/user/${userInfo.username}`} target='_blank' className='hover:underline'>
