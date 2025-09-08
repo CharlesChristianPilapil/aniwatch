@@ -72,7 +72,7 @@ const AuthModal = (props: AuthModalType) => {
             className="flex items-center justify-center px-5 py-10 overflow-y-scroll overflow-x-hidden"
         >
             <Fade in={props.isOpen} timeout={300}>
-                <div className="bg-background/75 backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
+                <div className="bg-card backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
                     {currentProcess === "register" && (
                         <RegisterForm<RegisterFormData, AuthProcessType>
                             methods={registerMethod}

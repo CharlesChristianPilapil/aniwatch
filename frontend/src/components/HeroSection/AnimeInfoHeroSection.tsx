@@ -10,7 +10,7 @@ const AnimeInfoHeroSection = () => {
     const showLoaders = !data?.success || isLoading || isFetching;
 
     return (
-        <header className="relative bg-main/25 pb-10 lg:pb-0">
+        <header className="relative bg-card pb-10 lg:pb-0">
             {data?.image && !isFetching && (
                 <div
                     className="absolute inset-0 bg-center bg-cover bg-no-repeat blur-md opacity-25 z-0"
@@ -87,7 +87,7 @@ const AnimeInfoHeroSection = () => {
                         )}
                     </div>
                 </div>
-                <div className="lg:bg-main/25 w-full lg:w-[300px] xl:w-[400px] lg:pt-10 px-4 md:pb-10 space-y-2">
+                <div className="lg:bg-main/10 w-full lg:w-[300px] xl:w-[400px] lg:pt-10 px-4 md:pb-10 space-y-2">
                     {showLoaders ? (
                         <div className="w-full flex flex-col gap-2">
                             <Skeleton className="h-[32px] lg:hidden" sx={{ transform: "unset" }}/>

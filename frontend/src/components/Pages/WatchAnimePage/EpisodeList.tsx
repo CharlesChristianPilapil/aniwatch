@@ -44,10 +44,10 @@ const EpisodeList = ({ episodes, isFetching, isLoading }: Props) => {
         <div className="w-full lg:max-w-[300px] order-2 lg:order-1">
             <div className="flex gap-2 text-xs py-2">
                 <div className="flex items-center gap-1">
-                    <div className="bg-main/25 h-4 w-4 rounded-sm" /> Filler Episodes
+                    <div className="bg-main/20 h-4 w-4 rounded-sm" /> Filler Episodes
                 </div>
                 <div className="flex items-center gap-1">
-                    <div className="bg-secondary-accent/25 h-4 w-4 rounded-sm" /> Non-Filler Episodes
+                    <div className="bg-secondary-accent/20 h-4 w-4 rounded-sm" /> Non-Filler Episodes
                 </div>
             </div>
             <FormControl className="w-full text-main mb-4">
@@ -102,11 +102,11 @@ const EpisodeList = ({ episodes, isFetching, isLoading }: Props) => {
                     visibleEpisodes?.map((episode) => (
                         <li 
                             key={episode.id} 
-                            className={`${episode.isFiller ? 'bg-main/25' : 'bg-secondary-accent/25'} overflow-hidden rounded-sm`}
+                            className={`${episode.isFiller ? 'bg-main/20' : 'bg-secondary-accent/20'} overflow-hidden rounded-sm`}
                         > 
                             <Link 
                                 to={`/watch/${episode.id}`} 
-                                className={`py-3 block ${episodeId === episode.id ? 'pointer-events-none bg-primary-accent' : ''} px-2`}
+                                className={`py-3 block ${episodeId === episode.id ? 'pointer-events-none bg-card' : ''} px-2`}
                             >
                                 <div className="flex gap-2">
                                     <span className="w-[24px]"> {episode.number} </span> <span className="whitespace-nowrap overflow-hidden text-ellipsis flex-1">{episode.title}</span>

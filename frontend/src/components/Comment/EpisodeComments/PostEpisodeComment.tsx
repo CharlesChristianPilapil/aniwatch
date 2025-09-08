@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import TextArea from "../../TextArea";
-import type { RootState } from "../../../store";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+
+// Services / store / types
+import type { RootState } from "../../../store";
+import useWebSocket from "../../../hooks/useWebSocket";
 import { CommentFormSchema, type CommentFormData } from "../../../utils/schema/comment.schema";
 import { useAddCommentMutation } from "../../../services/commentService";
-import toast from "react-hot-toast";
-import useWebSocket from "../../../hooks/useWebSocket";
-import { useState } from "react";
+
+// Components
+import TextArea from "../../TextArea";
 import AuthModal from "../../Modal/AuthModal";
 
 const PostEpisodeComment = () => {
@@ -26,6 +30,7 @@ const PostEpisodeComment = () => {
             entity_id: episodeId,
             entity_type: "anime_episode",
             parent_comment_id: null,
+            reply_to_comment_id: null,
             content: ""
         }
     });
@@ -101,8 +106,9 @@ const PostEpisodeComment = () => {
                 )}
                 <div className="flex flex-col gap-4">
                     <TextArea 
+                        shrink
                         {...register("content")}
-                        className='bg-background/50'
+                        className='bg-background/50 min-h-[120px]'
                         placeholder='add a comment'
                         onFocus={() => handleTyping(true)}
                         onBlur={() => handleTyping(false)}
@@ -112,7 +118,7 @@ const PostEpisodeComment = () => {
                         disabled={!isDirty || addCommentMutationMethod.isLoading}
                         className="self-end border p-2 rounded border-main/50 text-sm cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
                     > 
-                        Add comment 
+                        Post comment 
                     </button>
                 </div>
             </div>

@@ -8,14 +8,18 @@ export type CommentType = {
     updated_at: string;
     username: string;
     avatar_image: string | null;
+    parent_comment_id: number | null;
+    reply_to_comment_id: number | null;
+    replies_count: number | null;
 }
 
-type GetCommentsType = {
+export type GetCommentsType = {
     success: boolean;
     hasNextPage: boolean;
     totalPages: number;
     currentPage: number;
     results: CommentType[];
+    totalCount: number;
 }
 
 export const commentService = api.injectEndpoints({
@@ -30,13 +34,31 @@ export const commentService = api.injectEndpoints({
                 body: data,
             }),
         }),
-        getComments: builder.query<GetCommentsType, { entity_id: string; entity_type: string, page: number | string }>({
-            query: ({ entity_id, entity_type, page }) => `/api/comments?page=${page}&entity_id=${entity_id}&entity_type=${entity_type}`,
+        getComments: builder.infiniteQuery<GetCommentsType, { entity_id: string; entity_type: string; }, number>({
+            keepUnusedDataFor: 0,
+            infiniteQueryOptions: {
+                initialPageParam: 1,
+                getNextPageParam: (lastPage, _allPages, lastPageParam) => lastPage.hasNextPage ? lastPageParam + 1 : undefined,
+            },
+            query: ({ queryArg: { entity_id, entity_type }, pageParam }) => {
+                return `/api/comments?entity_id=${entity_id}&entity_type=${entity_type}&page=${pageParam}`;
+            }
+        }),
+        getReplies: builder.infiniteQuery<GetCommentsType, { entity_id: string; entity_type: string; parent_comment_id: number | string }, number>({
+            keepUnusedDataFor: 0,
+            infiniteQueryOptions: {
+                initialPageParam: 1,
+                getNextPageParam: (lastPage, _allPages, lastPageParam) => lastPage.hasNextPage ? lastPageParam + 1 : undefined,
+            },
+            query: ({ queryArg: { entity_id, entity_type, parent_comment_id }, pageParam }) => {
+                return `/api/comments/replies?entity_id=${entity_id}&entity_type=${entity_type}&parent_comment_id=${parent_comment_id}&page=${pageParam}`;
+            },
         }),
     })
-})
+});
 
 export const {
     useAddCommentMutation,
-    useGetCommentsQuery,
+    useGetCommentsInfiniteQuery,
+    useGetRepliesInfiniteQuery
 } = commentService;

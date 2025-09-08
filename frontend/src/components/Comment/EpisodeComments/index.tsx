@@ -1,55 +1,57 @@
-import MessageIcon from '@mui/icons-material/Message';
-import PostEpisodeComment from './PostEpisodeComment';
-import { type CommentType, useAddCommentMutation, useGetCommentsQuery } from '../../../services/commentService';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import GroupsIcon from '@mui/icons-material/Groups';
 import { useParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
-import useWebSocket from '../../../hooks/useWebSocket';
+import { useEffect, useState } from 'react';
+
+// Services / store / types
 import type { EpisodeCommentMessageType } from '../../../utils/types/websockets/episode-comment.socket.type';
 import type { SocketListenerType } from '../../../utils/types/websockets/socket.type';
-import CommentTab from './CommentTab';
+import { type CommentType, useAddCommentMutation, useGetCommentsInfiniteQuery } from '../../../services/commentService';
+import useWebSocket from '../../../hooks/useWebSocket';
+
+// Components
+import EpisodeCommentWrapper from './CommentWrapper';
+
+// MUI
+import MessageIcon from '@mui/icons-material/Message';
+import PostEpisodeComment from './PostEpisodeComment';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import GroupsIcon from '@mui/icons-material/Groups';
+import { Skeleton } from '@mui/material';
 
 const EpisodeCommentSection = () => {
     const { addSocketListener } = useWebSocket();
 
     const { episodeId } = useParams();
-    const lastEpisodeId = useRef(episodeId);
-
-    const [page, setPage] = useState(1);
 
     // socket state
     const [typing, setTyping] = useState(false);
     const [viewerCount, setViewerCount] = useState(0);
-    
-    if (lastEpisodeId.current !== episodeId) {
-        lastEpisodeId.current = episodeId;
-        if (page !== 1) setPage(1);
-    }
 
-    const { data, refetch, isLoading, isFetching } = useGetCommentsQuery({ entity_id: episodeId!, entity_type: "anime_episode", page });
+    const { data, hasNextPage, isLoading, fetchNextPage, isFetchingNextPage } = useGetCommentsInfiniteQuery({ entity_id: episodeId!, entity_type: "anime_episode" });
     const [, addCommentMutationMethod] = useAddCommentMutation();
     
-    const hasNextPage = data?.hasNextPage && !isLoading;
+    const lastPage = data?.pages.at(-1);
+    const totalCount = lastPage?.totalCount;
+    
+    const enableViewMore = hasNextPage && !isLoading;
 
-    const [allComments, setAllComments] = useState<CommentType[]>([]);
-    const isCommentsEmpty = allComments.length === 0 && !isLoading;
+    const [allComments, setAllComments] = useState<CommentType[] | undefined>([]);
+    const isCommentsEmpty = allComments?.length === 0 && !isLoading;
+
 
     useEffect(() => {
-        if (!data?.results) return;
-        setAllComments((prevVal) => {
-            if (page === 1) {
-                return data.results;
-            }
-            const newComments = [...prevVal, ...data.results];
-            const unique = Array.from(new Map(newComments.map(c => [c.id, c])).values());
+        setAllComments([]);
+    }, [episodeId]);
+
+    useEffect(() => {
+        const allReplies = data?.pages.flatMap(page => page.results ?? []);
+        if (!allReplies) return;
+      
+        setAllComments(prevVal => {
+            const combined = [...(prevVal ?? []), ...allReplies];
+            const unique = Array.from(new Map([...combined].map(reply => [reply.id, reply])).values());
             return unique;
         });
-    }, [data, page]);
-
-    useEffect(() => {
-        refetch();
-    }, [episodeId, refetch]);
+    }, [data?.pages]);
 
     useEffect(() => {
         const unsubscribe = addSocketListener<EpisodeCommentMessageType>((data) => {
@@ -60,7 +62,7 @@ const EpisodeCommentSection = () => {
 
                 if (data.action === "post_comment") {
                     setAllComments((prevVal) => {
-                        const newComments = [data.payload, ...prevVal];
+                        const newComments = [data.payload, ...(prevVal ?? [])];
                         const unique = Array.from(new Map(newComments.map(c => [c.id, c])).values());
                         return unique;
                     });
@@ -90,18 +92,18 @@ const EpisodeCommentSection = () => {
                     <GroupsIcon />
                 </div>
             </div>
-            <div className="bg-main/25 rounded px-4 py-8 space-y-4">
+            <div className="bg-card rounded px-4 py-8 space-y-4">
                 <div className='flex justify-between items-center'>
                     <div className='flex items-center gap-2'>
                         <MessageIcon />
-                        <p> 0 Comments </p>
+                        <p> {totalCount || 0} Comments </p>
                     </div>
                     <button> Sort </button>
                 </div>
-                <PostEpisodeComment />
-                {isLoading && <p> Loading... </p>}
+                {!isLoading && <PostEpisodeComment />}
+                {isLoading && <Skeleton height={300} />}
                 {isCommentsEmpty && <p> No comments yet. </p>}
-                <ul className='space-y-8'>
+                <ul className='space-y-5'>
                     {(typing || addCommentMutationMethod.isLoading) && (
                         <li className='flex gap-4'>
                             <img 
@@ -116,13 +118,13 @@ const EpisodeCommentSection = () => {
                         </li>
                     )}
                     {allComments?.map((data) => (
-                        <CommentTab key={data.id} {...data} />
+                        <EpisodeCommentWrapper key={data.id} {...data} />
                     ))}
                 </ul>
-                {hasNextPage && (
+                {enableViewMore && allComments && ((totalCount ?? 0) >= allComments?.length) && (
                     <button 
-                        disabled={isFetching}
-                        onClick={() => setPage(prev => prev + 1)}
+                        disabled={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}
                         className='
                             flex items-center gap-1 w-fit text-primary-accent/75 disabled:opacity-50 
                             hover:text-primary-accent focus:text-primary-accent active:text-primary-accent cursor-pointer

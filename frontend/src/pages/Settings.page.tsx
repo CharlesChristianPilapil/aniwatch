@@ -34,7 +34,7 @@ const TabPanel = (props: TabPanelProps) => {
             hidden={value !== panelId}
             id={`tabpanel-${panelId}`}
             aria-labelledby={`tab-${panelId}`}
-            className="bg-main/15 rounded flex-1 w-full h-fit"
+            className="bg-card rounded flex-1 w-full h-fit"
             {...other}
 
         >
@@ -81,7 +81,7 @@ const SettingsPage = () => {
                         centered={width >= 560}
                         scrollButtons
                         allowScrollButtonsMobile
-                        className="lg:border-r lg:border-r-main/25 lg:bg-main/15 lg:h-fit rounded lg:w-[188px]"
+                        className="lg:border-r lg:border-r-main/25 bg-card lg:h-fit rounded lg:w-[188px]"
                         slotProps={{
                             indicator: {
                                 className: "bg-primary-accent"

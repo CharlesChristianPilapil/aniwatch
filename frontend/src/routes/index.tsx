@@ -23,10 +23,6 @@ import {
     AnimeInfoLazy 
 } from "./LazyPages";
 
-
-
-// Protected
-
 export const router = createBrowserRouter([
     {
         path: "/",

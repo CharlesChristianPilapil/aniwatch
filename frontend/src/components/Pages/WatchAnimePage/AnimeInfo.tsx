@@ -16,7 +16,7 @@ const AnimeInfo = ({
     isError
 }: Props) => {
     return (
-        <div className="w-full xl:max-w-[400px] space-y-4 relative bg-main/15 px-2 pt-2 pb-4 rounded-sm overflow-hidden">
+        <div className="w-full xl:max-w-[400px] space-y-4 relative bg-card px-2 pt-2 pb-4 rounded-sm overflow-hidden">
             {(AnimeInfoData?.image && !isFetching && !isLoading) && (
                 <div
                     className="absolute inset-0 bg-center bg-cover bg-no-repeat blur-md opacity-25 -z-1"

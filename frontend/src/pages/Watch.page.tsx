@@ -32,25 +32,25 @@ const WatchPage = () => {
         if (!socket) return;
       
         const handleOpen = () => {
-          sendMessage({
-            type: "join",
-            action: "watching",
-            channel: episodeId,
-          });
+            sendMessage({
+                type: "join",
+                action: "watching",
+                channel: episodeId,
+            });
         };
       
         if (socket.readyState === WebSocket.OPEN) handleOpen();
         else socket.addEventListener("open", handleOpen);
       
         return () => socket.removeEventListener("open", handleOpen);
-      }, [episodeId, sendMessage, socket]);
+    }, [episodeId, sendMessage, socket]);
 
     return (
         <>
             <PageTitle title={`Watch ${title}`} />
             <main className="container py-10">
                 <div className="flex flex-col xl:flex-row gap-x-4 gap-y-10">
-                    <div className="flex flex-col lg:flex-row gap-4 bg-black/25 p-2 rounded-sm flex-1">
+                    <div className="flex flex-col lg:flex-row gap-4 bg-card p-2 rounded-sm flex-1">
                         <EpisodeList 
                             episodes={AnimeInfoData?.episodes || []}
                             isLoading={isAnimeInfoLoading}

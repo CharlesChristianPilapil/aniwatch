@@ -88,3 +88,21 @@ body {
     color: white !important;
     border-radius: 8px;
 }
+
+.reply-content {
+    &:has(span) {
+        margin-top: -10px;
+    }
+
+    span {
+        transform: translateY(2px);
+        font-size: 12px;
+    }
+  
+    a {
+        font-weight: bold;
+        &:hover {
+            color: var(--color-secondary-accent);
+        }
+    }
+}

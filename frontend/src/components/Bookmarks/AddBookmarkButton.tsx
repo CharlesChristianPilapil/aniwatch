@@ -55,6 +55,7 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
 
     const [addBookmark] = useAddBookmarkMutation();
     const {
+        isLoading,
         data: bookmarkChecker,
         refetch: refetchChecker,
         isError: isCheckerError,
@@ -136,6 +137,8 @@ const AddBookmarkButton = ({ payload }: AddToBookmarkType) => {
 
         prevOpen.current = open;
     }, [open]);
+
+    if (isLoading) return null;
 
     return (
         <div>

@@ -360,6 +360,7 @@ const InformationForm = ({ info }: { info?: UserInfoType }) => {
                     error={errors.bio?.message}
                     wrapper={{ className: "sm:col-span-2 lg:col-span-4" }}
                     disabled={disableProfile}
+                    className="h-[120px] bg-main text-background read-only:text-background/50"
                 />
             </div>
             <div className="flex justify-between">

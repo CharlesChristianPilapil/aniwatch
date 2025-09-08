@@ -99,7 +99,7 @@ function App() {
     return (
         <>
             <PageTitle title="Home" />
-            <header className="flex items-center min-height-screen py-10 bg-[url(/images/frieren-bg.webp)] bg-center bg-no-repeat mb-10 blurred-edge relative">
+            <header className="flex items-center min-height-screen py-10 bg-[url(/images/frieren-bg.webp)] bg-cover bg-center bg-no-repeat mb-10 blurred-edge relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-black/50" />
                 <div className="container relative z-1">
                     <div className="max-w-[800px]">

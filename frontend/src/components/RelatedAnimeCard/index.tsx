@@ -27,7 +27,7 @@ const RelatedAnimeCard = ({ list, isLoading = false }: Props) => {
     return (
         <div className="w-full">
             <h2 className="sub-header"> Related Anime </h2>
-            <div className="bg-main/10 pb-4 rounded-sm">
+            <div className="bg-card pb-4 rounded-sm">
                 <ul className={`max-h-[624px] ${list.length < 6 || isLoading ? 'overflow-y-hidden' : 'overflow-y-scroll'} pt-2 px-2 transparent-track`}>
                     {isLoading ? (
                         <AnimeItemLoader />

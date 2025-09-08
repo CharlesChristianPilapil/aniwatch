@@ -16,7 +16,7 @@ const GenreCard = () => {
             <h2 className="sub-header">
                 {error ? "Failed to load Genres" : "Genres"}
             </h2>
-            <div className="bg-main/25 p-2 rounded-sm w-full">
+            <div className="bg-card p-2 rounded-sm w-full">
                 {(isLoading || error) && <GenreCardSkeleton />}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-1 lg:gap-y-0">
                     {data?.genres?.slice(0,!toggle ? width >= 1024 ? 21 : 20 : data.genres.length)

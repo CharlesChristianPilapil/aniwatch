@@ -135,7 +135,7 @@ const UpdateProfileModal = ({
             className="flex items-center justify-center px-5 py-10 overflow-y-scroll overflow-x-hidden"
         >
             <Fade in={isOpen} timeout={300}>
-                <div className="bg-background/75 backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
+                <div className="bg-card backdrop-blur-sm rounded-2xl w-full min-[440px]:max-w-[476px] my-auto">
                     <form 
                         onSubmit={handleSubmit(onSubmit)} 
                         className="space-y-4 px-5 sm:px-10 py-10"

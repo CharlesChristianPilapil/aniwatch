@@ -29,6 +29,9 @@ const commentsSocket = (ws, wss) => {
                     const payload = { message: `${ws.id} is typing...`, isTyping: data.payload.isTyping, }
                     broadCast(payload, true);
                     break;
+                case "post_reply":
+                    broadCast(data.payload);
+                    break;
                 default: console.log("Unknown command.");
             }
         } catch (err) {

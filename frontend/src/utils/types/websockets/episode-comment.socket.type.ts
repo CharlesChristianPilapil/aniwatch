@@ -11,7 +11,7 @@ type TypingMessage = {
 } & BaseType;
   
 type PostCommentMessage = {
-    action: "post_comment";
+    action: "post_comment" | "post_reply";
     payload: CommentType;
 } & BaseType;
 
