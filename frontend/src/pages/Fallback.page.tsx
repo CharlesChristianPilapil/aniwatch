@@ -1,7 +1,7 @@
 import PageTitle from "../components/PageTitle";
 
 const Fallback = ({ error }: { error: Error }) => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.MODE === 'production') {
         console.error(error);
     }
     return (
