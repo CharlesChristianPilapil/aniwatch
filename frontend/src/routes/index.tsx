@@ -22,11 +22,17 @@ import {
     SettingsPageLazy, 
     AnimeInfoLazy 
 } from "./LazyPages";
+import { ErrorBoundary } from "react-error-boundary";
+import Fallback from "../pages/Fallback.page";
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <RootLayout />,
+        element: (
+            <ErrorBoundary FallbackComponent={Fallback}>
+                <RootLayout />
+            </ErrorBoundary>
+        ),
         children: [
             { index: true, element: <HomeLazy /> },
             { path: "/top-airing", element: <TopAiringLazy /> },

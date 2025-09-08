@@ -23,7 +23,7 @@ const Fallback = ({ error }: { error: Error }) => {
                 </button>
             </main>
         </>
-    )
-}
+    );
+};
 
-export default Fallback
+export default Fallback;
