@@ -5,7 +5,7 @@ import sql from "../../config/pg-db.js";
 import handleFailedAttempt from "../../utils/helpers/handleFailedAttempt.js";
 import parseAsUTC from "../../utils/helpers/parseAsUtc.js";
 import generateOtp from "../../utils/helpers/generateOtp.js";
-import { MFA_TYPE } from "../../utils/constants.js";
+import { DOMAIN_URL, MFA_TYPE } from "../../utils/constants.js";
 
 const LOCK_DURATION = (1 * 60 + 30) * 1000;
 const ACCESS_TOKEN_DURATION = 15 * 60 * 1000;
@@ -213,15 +213,11 @@ export const verify = async (req, res, next) => {
 
         const { password: pass, is_verified, ...safeUser } = user;
 
-        // Verify these are correctly defined
-        console.log('IS_PRODUCTION:', IS_PRODUCTION);
-        console.log('ACCESS_TOKEN_DURATION:', ACCESS_TOKEN_DURATION);
-        console.log('REFRESH_TOKEN_DURATION:', REFRESH_TOKEN_DURATION);
-
         const cookieOptions = {
             httpOnly: true,
             secure: IS_PRODUCTION,
             sameSite: IS_PRODUCTION ? "None" : "Lax",
+            domain: DOMAIN_URL,
             path: "/",
         }
 

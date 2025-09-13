@@ -12,3 +12,5 @@ export const MFA_TYPE = {
 }
 
 export const ANIME_API = process.env.ANIME_API;
+
+export const DOMAIN_URL = process.env.NODE_ENV === "production" ? ".cc-anistream.vercel.app" : undefined;
