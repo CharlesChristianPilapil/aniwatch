@@ -14,7 +14,7 @@ export const bookmarkService = api.injectEndpoints({
             Record<string, unknown>
         >({
             query: (data) => ({
-                url: "/api/bookmarks/",
+                url: "/api/bookmarks",
                 method: "POST",
                 body: data,
             }),
@@ -24,7 +24,7 @@ export const bookmarkService = api.injectEndpoints({
             AnimeListResponseType,
             { username?: string, page?: number; status?: string; sort?: string; order?: string }
         >({
-            query: ({ username = "", page = "", status = "", sort = "", order = "" }) => `/api/bookmarks/?username=${username}&status=${status}&sort=${sort}&order=${order}&page=${page}`,
+            query: ({ username = "", page = "", status = "", sort = "", order = "" }) => `/api/bookmarks?username=${username}&status=${status}&sort=${sort}&order=${order}&page=${page}`,
             providesTags: ["bookmarkList"],
         }),
         isBookmarked: builder.query<BookmarkCheckerType, { anime_id: string }>({
