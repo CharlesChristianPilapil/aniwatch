@@ -5,7 +5,7 @@ import sql from "../../config/pg-db.js";
 import handleFailedAttempt from "../../utils/helpers/handleFailedAttempt.js";
 import parseAsUTC from "../../utils/helpers/parseAsUtc.js";
 import generateOtp from "../../utils/helpers/generateOtp.js";
-import { DOMAIN_URL, MFA_TYPE } from "../../utils/constants.js";
+import { MFA_TYPE } from "../../utils/constants.js";
 
 const LOCK_DURATION = (1 * 60 + 30) * 1000;
 const ACCESS_TOKEN_DURATION = 15 * 60 * 1000;
@@ -217,7 +217,6 @@ export const verify = async (req, res, next) => {
             httpOnly: true,
             secure: IS_PRODUCTION,
             sameSite: IS_PRODUCTION ? "None" : "Lax",
-            domain: DOMAIN_URL,
             path: "/",
         }
 
@@ -235,6 +234,8 @@ export const verify = async (req, res, next) => {
                 success: true,
                 message: "Logged in successfully.",
                 data: safeUser,
+                accessToken,
+                refreshToken,
             });
     };
 

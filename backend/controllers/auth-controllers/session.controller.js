@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { DOMAIN_URL } from "../../utils/constants.js";
 
 const ACCESS_TOKEN_DURATION = 15 * 60 * 1000;
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
@@ -60,7 +59,6 @@ export const refreshSession = (req, res, next) => {
                         httpOnly: true,
                         secure: IS_PRODUCTION,
                         sameSite: IS_PRODUCTION ? "None" : "Lax",
-                        domain: DOMAIN_URL,
                         maxAge: ACCESS_TOKEN_DURATION,
                     })
                     .status(200)
