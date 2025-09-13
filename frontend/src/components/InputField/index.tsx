@@ -10,7 +10,7 @@ type InputFieldProps = {
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     ({ label, error, ...props }, ref) => {
-        const [showPassword, setShowPassword] = useState<boolean>(true);
+        const [showPassword, setShowPassword] = useState<boolean>(false);
         const isPassword = props?.type === "password";
 
         const inputType = isPassword && showPassword ? "text" : props.type;

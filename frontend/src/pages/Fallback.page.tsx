@@ -1,6 +1,6 @@
 import PageTitle from "../components/PageTitle";
 
-const Fallback = ({ error }: { error: Error }) => {
+const Fallback = ({ error }: { error?: Error }) => {
     if (import.meta.env.MODE === 'production') {
         console.error(error);
     }

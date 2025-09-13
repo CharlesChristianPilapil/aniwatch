@@ -213,17 +213,25 @@ export const verify = async (req, res, next) => {
 
         const { password: pass, is_verified, ...safeUser } = user;
 
+        // Verify these are correctly defined
+        console.log('IS_PRODUCTION:', IS_PRODUCTION);
+        console.log('ACCESS_TOKEN_DURATION:', ACCESS_TOKEN_DURATION);
+        console.log('REFRESH_TOKEN_DURATION:', REFRESH_TOKEN_DURATION);
+
+        const cookieOptions = {
+            httpOnly: true,
+            secure: IS_PRODUCTION,
+            sameSite: IS_PRODUCTION ? "None" : "Lax",
+            path: "/",
+        }
+
         return res
             .cookie("accessToken", accessToken, {
-                httpOnly: true,
-                secure: IS_PRODUCTION,
-                sameSite: IS_PRODUCTION ? "None" : "Lax",
+                ...cookieOptions,
                 maxAge: ACCESS_TOKEN_DURATION,
             })
             .cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: IS_PRODUCTION,
-                sameSite: IS_PRODUCTION ? "None" : "Lax",
+                ...cookieOptions,
                 maxAge: REFRESH_TOKEN_DURATION,
             })
             .status(200)

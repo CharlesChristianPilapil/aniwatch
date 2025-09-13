@@ -12,7 +12,6 @@ import commentRoutes from "./routes/comments.routes.js";
 import notFound from "./middleware/notFound.js";
 import errorHandler from "./middleware/error.js";
 
-
 import "./cron/cleanMFA.js";
 import "./cron/cleanLoginAttempts.js";
 const PORT = process.env.PORT || 8000;
