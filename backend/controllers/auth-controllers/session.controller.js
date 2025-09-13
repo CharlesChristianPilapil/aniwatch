@@ -58,7 +58,8 @@ export const refreshSession = (req, res, next) => {
                     .cookie("accessToken", accessToken, {
                         httpOnly: true,
                         secure: IS_PRODUCTION,
-                        sameSite: IS_PRODUCTION ? "None" : "Lax",
+                        // sameSite: IS_PRODUCTION ? "None" : "Lax",
+                        sameSite: "Lax",
                         maxAge: ACCESS_TOKEN_DURATION,
                     })
                     .status(200)

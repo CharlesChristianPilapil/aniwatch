@@ -69,6 +69,12 @@ const VerifyCodeForm = <T extends VerifyFormData, P>({
         const toastId = toast.loading("Verifying account...");
         try {
             const res = await verifyMutation(payload).unwrap();
+
+            if (res.accessToken && res.refreshToken) {
+                localStorage.setItem("accessToken", res.accessToken);
+                localStorage.setItem("refreshToken", res.refreshToken);
+            }
+
             toast.success("Account logged in.", { id: toastId });
             dispatch(setCredentials(res.data));
             onSuccess();

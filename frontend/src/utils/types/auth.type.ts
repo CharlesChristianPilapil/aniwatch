@@ -10,6 +10,8 @@ export type VerificationResponseType = {
     success: boolean;
     message: string;
     data: UserInfoType;
+    accessToken?: string;
+    refreshToken?: string;
 };
 
 export type AuthProcessType = "login" | "register" | "verify-code" | "forgot-password";

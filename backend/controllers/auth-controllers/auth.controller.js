@@ -216,7 +216,8 @@ export const verify = async (req, res, next) => {
         const cookieOptions = {
             httpOnly: true,
             secure: IS_PRODUCTION,
-            sameSite: IS_PRODUCTION ? "None" : "Lax",
+            // sameSite: IS_PRODUCTION ? "None" : "Lax",
+            sameSite: "Lax",
             path: "/",
         }
 
