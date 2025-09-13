@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { DOMAIN_URL } from "../../utils/constants";
+import { DOMAIN_URL } from "../../utils/constants.js";
 
 const ACCESS_TOKEN_DURATION = 15 * 60 * 1000;
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
